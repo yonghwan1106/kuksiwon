@@ -2876,26 +2876,6 @@ function addReviewStyles() {
     // This function is replaced by addAdvancedReviewStyles
     addAdvancedReviewStyles();
 }
-        .review-container { max-width: 1200px; margin: 0 auto; }
-        .review-filters { background: white; padding: 20px 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; gap: 30px; align-items: end; }
-        .filter-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 13px; }
-        .questions-list { display: flex; flex-direction: column; gap: 20px; }
-        .question-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
-        .question-card-header { padding: 25px 30px 15px; display: flex; justify-content: between; align-items: flex-start; }
-        .question-info h4 { margin-bottom: 10px; color: #2c3e50; }
-        .question-meta { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .question-meta .badge { font-size: 11px; padding: 4px 8px; }
-        .ai-badge { background: rgba(17, 153, 142, 0.1); color: #11998e; }
-        .manual-badge { background: rgba(245, 87, 108, 0.1); color: #f5576c; }
-        .question-preview { padding: 0 30px 15px; color: #6c757d; }
-        .question-actions { padding: 20px 30px; background: #f8f9fa; display: flex; gap: 10px; }
-        .status-badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-        .status-badge.success { background: rgba(46, 204, 113, 0.1); color: #2ecc71; }
-        .status-badge.warning { background: rgba(230, 126, 34, 0.1); color: #e67e22; }
-        .status-badge.info { background: rgba(52, 152, 219, 0.1); color: #3498db; }
-    `;
-    document.head.appendChild(style);
-}
 
 function addAnalyticsStyles() {
     const style = document.createElement('style');
