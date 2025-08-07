@@ -311,7 +311,60 @@
                 <h2>AI 문제 생성</h2>
                 <p>인공지능 기술을 활용하여 고품질의 시험 문제를 빠르게 생성하세요</p>
             </div>
-            <!-- Generator content will be loaded here -->
+            
+            <div class="generator-container">
+                <div class="generator-modes">
+                    <div class="mode-selector">
+                        <button class="mode-btn active" data-mode="basic">
+                            <i class="fas fa-magic"></i>
+                            <span>기본 생성</span>
+                        </button>
+                        <button class="mode-btn" data-mode="advanced">
+                            <i class="fas fa-cogs"></i>
+                            <span>고급 생성</span>
+                        </button>
+                        <button class="mode-btn" data-mode="batch">
+                            <i class="fas fa-layer-group"></i>
+                            <span>일괄 생성</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="generation-form">
+                    <div class="form-group">
+                        <label>의료 전문 분야</label>
+                        <select class="form-control">
+                            <option>내과학</option>
+                            <option>외과학</option>
+                            <option>성인간호학</option>
+                            <option>약리학</option>
+                            <option>소아과학</option>
+                            <option>응급의학</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>문제 주제</label>
+                        <input type="text" class="form-control" placeholder="예: 급성 심근경색의 진단과 치료">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>난이도 설정</label>
+                        <select class="form-control">
+                            <option>하 (1-3)</option>
+                            <option>중 (4-6)</option>
+                            <option>상 (7-10)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-magic"></i>
+                            AI 문제 생성
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Review Page (Hidden by default) -->
@@ -320,7 +373,61 @@
                 <h2>검토 및 승인</h2>
                 <p>생성된 문제들을 검토하고 승인하여 시험에 활용할 수 있도록 관리하세요</p>
             </div>
-            <!-- Review content will be loaded here -->
+            
+            <div class="review-container">
+                <div class="review-stats">
+                    <div class="stat-card">
+                        <h3>142</h3>
+                        <p>검토 대기</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>1,650</h3>
+                        <p>승인됨</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>89</h3>
+                        <p>반려됨</p>
+                    </div>
+                </div>
+                
+                <div class="review-filters">
+                    <select class="form-control">
+                        <option>전체 상태</option>
+                        <option>검토 대기</option>
+                        <option>승인됨</option>
+                        <option>반려됨</option>
+                    </select>
+                    <select class="form-control">
+                        <option>전체 전공</option>
+                        <option>내과학</option>
+                        <option>외과학</option>
+                        <option>성인간호학</option>
+                    </select>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-filter"></i>
+                        필터 적용
+                    </button>
+                </div>
+                
+                <div class="review-list">
+                    <div class="review-item">
+                        <div class="question-info">
+                            <h4>급성 심근경색 진단</h4>
+                            <p>65세 남자 환자가 흉통을 주소로 응급실에 내원...</p>
+                            <div class="item-meta">
+                                <span class="badge success">AI 생성</span>
+                                <span class="specialty">내과학</span>
+                                <span class="difficulty">상급</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="btn btn-success">승인</button>
+                            <button class="btn btn-danger">반려</button>
+                            <button class="btn btn-outline">상세보기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Analytics Page (Hidden by default) -->
@@ -329,7 +436,76 @@
                 <h2>분석 및 통계</h2>
                 <p>시스템 사용 현황과 성과를 다양한 차트와 지표로 분석하세요</p>
             </div>
-            <!-- Analytics content will be loaded here -->
+            
+            <div class="analytics-container">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>월별 문제 생성 현황</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="monthlyTrendChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>난이도 분포</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="difficultyChart" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>과목별 문제 수</h3>
+                        </div>
+                        <div class="performance-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">내과학</span>
+                                <span class="metric-value">720문제</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">외과학</span>
+                                <span class="metric-value">580문제</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">성인간호학</span>
+                                <span class="metric-value">650문제</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">약리학</span>
+                                <span class="metric-value">420문제</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>시스템 성능 지표</h3>
+                        </div>
+                        <div class="performance-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">평균 생성 시간</span>
+                                <span class="metric-value">28.3초</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">성공률</span>
+                                <span class="metric-value">94.2%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">사용자 만족도</span>
+                                <span class="metric-value">4.2/5.0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">일일 활성 사용자</span>
+                                <span class="metric-value">23명</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
