@@ -1,7 +1,7 @@
 // Main JavaScript for AI Question Generator Prototype
 // 2025년도 한국보건의료인국가시험원 대국민 혁신제안 공모전 제출용
 
-// Global function for inline onclick events - must be defined before DOM loads
+// Global functions for inline onclick events - must be defined before DOM loads
 function switchPage(pageId) {
     console.log('switchPage called with:', pageId);
     
@@ -44,6 +44,39 @@ function switchPage(pageId) {
     } else {
         console.error(`Page element not found: ${pageId}-page`);
     }
+}
+
+// Mobile Navigation Functions - Global scope for HTML onclick
+function toggleMobileNav() {
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    const toggleBtn = document.querySelector('.mobile-nav-toggle i');
+    
+    if (mobileNavMenu && mobileNavMenu.classList.contains('active')) {
+        closeMobileNav();
+    } else {
+        if (mobileNavMenu) mobileNavMenu.classList.add('active');
+        if (mobileNavOverlay) mobileNavOverlay.style.display = 'block';
+        if (toggleBtn) {
+            toggleBtn.classList.remove('fa-bars');
+            toggleBtn.classList.add('fa-times');
+        }
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileNav() {
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    const toggleBtn = document.querySelector('.mobile-nav-toggle i');
+    
+    if (mobileNavMenu) mobileNavMenu.classList.remove('active');
+    if (mobileNavOverlay) mobileNavOverlay.style.display = 'none';
+    if (toggleBtn) {
+        toggleBtn.classList.remove('fa-times');
+        toggleBtn.classList.add('fa-bars');
+    }
+    document.body.style.overflow = '';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
