@@ -80,6 +80,66 @@ function switchPage(pageId) {
         switch(pageId) {
             case 'generator':
                 console.log('Loading generator page content');
+                if (!targetPage.querySelector('.generator-container')) {
+                    loadGeneratorPage();
+                }
+                break;
+            case 'review':
+                console.log('Loading review page content');
+                if (!targetPage.querySelector('.review-container')) {
+                    loadReviewPage();
+                }
+                break;
+            case 'analytics':
+                console.log('Loading analytics page content');
+                if (!targetPage.querySelector('.analytics-container')) {
+                    loadAnalyticsPage();
+                }
+                // Setup analytics charts if needed
+                setTimeout(() => {
+                    if (typeof setupAnalyticsCharts === 'function') {
+                        setupAnalyticsCharts();
+                    }
+                }, 200);
+                break;
+            default:
+                console.log('Loading dashboard page content');
+        }
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+    } else {
+        console.error(`Page element not found: ${pageId}-page`);
+    }
+}
+
+// Global function for inline onclick events
+function switchPage(pageId) {
+    console.log('switchPage called with:', pageId);
+    
+    // Remove active class from all nav items and pages
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    
+    navItems.forEach(nav => nav.classList.remove('active'));
+    pages.forEach(page => page.classList.remove('active'));
+    
+    // Add active class to clicked nav item
+    const clickedNav = document.querySelector(`[data-page="${pageId}"]`);
+    if (clickedNav) {
+        clickedNav.classList.add('active');
+    }
+    
+    // Show corresponding page
+    const targetPage = document.getElementById(`${pageId}-page`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        console.log(`Switched to ${pageId} page successfully`);
+        
+        // Load page-specific content if needed
+        switch(pageId) {
+            case 'generator':
+                console.log('Loading generator page content');
                 break;
             case 'review':
                 console.log('Loading review page content');
@@ -2928,8 +2988,8 @@ function addAnalyticsStyles() {
     `;
     document.head.appendChild(style);
 }
-// Mob
-ile Optimization Functions
+
+// Mobile Optimization Functions
 function isMobile() {
     return window.innerWidth <= 768;
 }
@@ -3571,3 +3631,24 @@ function monitorMobilePerformance() {
 
 // Initialize performance monitoring
 monitorMobilePerformance();
+// 
+Page loading functions
+function loadGeneratorPage() {
+    console.log('Loading generator page...');
+    // Generator page content is already in HTML
+}
+
+function loadReviewPage() {
+    console.log('Loading review page...');
+    // Review page content is already in HTML
+}
+
+function loadAnalyticsPage() {
+    console.log('Loading analytics page...');
+    // Analytics page content is already in HTML
+}
+
+function setupAnalyticsCharts() {
+    console.log('Setting up analytics charts...');
+    // Analytics charts setup
+}
