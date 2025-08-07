@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>모바일 테스트 - AI 기반 출제 지원 시스템</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+        }
+        
+        .test-item h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        .test-result {
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .btn:active {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>📱 모바일 최적화 테스트</h1>
+            <p>현재 화면에서의 최적화 상태를 확인합니다</p>
+        </div>
+        
+        <div class="test-item">
+            <h3>화면 크기</h3>
+            <div class="test-result info" id="screenSize">
+                측정 중...
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>모바일 디바이스 감지</h3>
+            <div class="test-result" id="deviceDetection">
+                확인 중...
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>터치 지원</h3>
+            <div class="test-result" id="touchSupport">
+                확인 중...
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>뷰포트 설정</h3>
+            <div class="test-result" id="viewportTest">
+                확인 중...
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>네트워크 상태</h3>
+            <div class="test-result" id="networkStatus">
+                확인 중...
+            </div>
+        </div>
+        
+        <button class="btn" onclick="runTests()">테스트 다시 실행</button>
+        <button class="btn" onclick="goToMainApp()" style="background: #27ae60;">메인 앱으로 이동</button>
+    </div>
+    
+    <script>
+        function runTests() {
+            // 화면 크기 테스트
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            document.getElementById('screenSize').textContent = `${screenWidth} × ${screenHeight}px`;
+            
+            // 모바일 디바이스 감지
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || screenWidth <= 768;
+            const deviceResult = document.getElementById('deviceDetection');
+            deviceResult.textContent = isMobile ? '모바일 디바이스 감지됨' : '데스크톱 디바이스';
+            deviceResult.className = `test-result ${isMobile ? 'success' : 'info'}`;
+            
+            // 터치 지원 확인
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const touchResult = document.getElementById('touchSupport');
+            touchResult.textContent = hasTouch ? '터치 지원됨' : '터치 미지원';
+            touchResult.className = `test-result ${hasTouch ? 'success' : 'warning'}`;
+            
+            // 뷰포트 설정 확인
+            const viewport = document.querySelector('meta[name="viewport"]');
+            const viewportResult = document.getElementById('viewportTest');
+            if (viewport && viewport.content.includes('width=device-width')) {
+                viewportResult.textContent = '뷰포트 올바르게 설정됨';
+                viewportResult.className = 'test-result success';
+            } else {
+                viewportResult.textContent = '뷰포트 설정 필요';
+                viewportResult.className = 'test-result warning';
+            }
+            
+            // 네트워크 상태 확인
+            const networkResult = document.getElementById('networkStatus');
+            if ('connection' in navigator) {
+                const connection = navigator.connection;
+                networkResult.textContent = `${connection.effectiveType || 'unknown'} (${connection.downlink || 'unknown'}Mbps)`;
+                networkResult.className = 'test-result info';
+            } else {
+                networkResult.textContent = '네트워크 정보 사용 불가';
+                networkResult.className = 'test-result warning';
+            }
+        }
+        
+        function goToMainApp() {
+            window.location.href = 'index.html';
+        }
+        
+        // 페이지 로드 시 테스트 실행
+        document.addEventListener('DOMContentLoaded', runTests);
+        
+        // 화면 회전 시 테스트 재실행
+        window.addEventListener('orientationchange', function() {
+            setTimeout(runTests, 500);
+        });
+        
+        // 리사이즈 시 테스트 재실행
+        window.addEventListener('resize', runTests);
+    </script>
+</body>
+</html>

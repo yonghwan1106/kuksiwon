@@ -17,6 +17,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
+// Mobile Navigation Functions
+function toggleMobileNav() {
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    const toggleBtn = document.querySelector('.mobile-nav-toggle i');
+    
+    if (mobileNavMenu.classList.contains('active')) {
+        closeMobileNav();
+    } else {
+        mobileNavMenu.classList.add('active');
+        mobileNavOverlay.style.display = 'block';
+        toggleBtn.classList.remove('fa-bars');
+        toggleBtn.classList.add('fa-times');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileNav() {
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    const toggleBtn = document.querySelector('.mobile-nav-toggle i');
+    
+    mobileNavMenu.classList.remove('active');
+    mobileNavOverlay.style.display = 'none';
+    toggleBtn.classList.remove('fa-times');
+    toggleBtn.classList.add('fa-bars');
+    document.body.style.overflow = '';
+}
+
+// Close mobile nav when window is resized to desktop
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+        closeMobileNav();
+    }
+});
+
 // Global function for inline onclick events
 function switchPage(pageId) {
     console.log('switchPage called with:', pageId);
@@ -2892,3 +2928,646 @@ function addAnalyticsStyles() {
     `;
     document.head.appendChild(style);
 }
+// Mob
+ile Optimization Functions
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+function isTablet() {
+    return window.innerWidth > 768 && window.innerWidth <= 1024;
+}
+
+// Touch event handlers for better mobile experience
+function addTouchSupport() {
+    const cards = document.querySelectorAll('.metric-card, .dashboard-card, .mode-btn');
+    
+    cards.forEach(card => {
+        card.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        card.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
+}
+
+// Optimize charts for mobile
+function optimizeChartsForMobile() {
+    if (isMobile()) {
+        const chartContainers = document.querySelectorAll('.chart-container');
+        chartContainers.forEach(container => {
+            container.style.height = '200px';
+        });
+    }
+}
+
+// Form enhancement functions
+function updateDifficultyDisplay(value) {
+    const display = document.getElementById('currentDifficulty');
+    if (!display) return;
+    
+    let label = '';
+    if (value <= 3) label = `초급 (${value})`;
+    else if (value <= 6) label = `중급 (${value})`;
+    else label = `고급 (${value})`;
+    
+    display.textContent = label;
+}
+
+function adjustCount(delta) {
+    const input = document.getElementById('count');
+    if (!input) return;
+    
+    const current = parseInt(input.value) || 1;
+    const newValue = Math.max(1, Math.min(20, current + delta));
+    input.value = newValue;
+    
+    updateEstimatedTime();
+}
+
+function updateEstimatedTime() {
+    const count = parseInt(document.getElementById('count')?.value) || 1;
+    const difficulty = parseInt(document.getElementById('difficultySlider')?.value) || 5;
+    const questionType = document.getElementById('questionType')?.value || 'multiple_choice';
+    
+    let baseTime = 30; // seconds per question
+    
+    // Adjust for difficulty
+    if (difficulty <= 3) baseTime *= 0.8;
+    else if (difficulty >= 7) baseTime *= 1.5;
+    
+    // Adjust for question type
+    const typeMultipliers = {
+        'multiple_choice': 1,
+        'scenario_based': 1.5,
+        'case_study': 2,
+        'image_based': 1.8,
+        'calculation': 1.3,
+        'diagnosis': 1.7
+    };
+    
+    baseTime *= (typeMultipliers[questionType] || 1);
+    
+    const totalTime = Math.ceil(baseTime * count);
+    const estimatedTimeElement = document.getElementById('estimatedTime');
+    
+    if (estimatedTimeElement) {
+        estimatedTimeElement.textContent = `(예상 ${totalTime}초)`;
+    }
+}
+
+function updateSpecialties() {
+    const subject = document.getElementById('subject')?.value;
+    const specialtySelect = document.getElementById('specialty');
+    
+    if (!specialtySelect) return;
+    
+    const specialties = {
+        'internal': ['심장내과', '소화기내과', '호흡기내과', '신장내과', '내분비내과'],
+        'surgery': ['일반외과', '흉부외과', '신경외과', '정형외과', '성형외과'],
+        'nursing': ['성인간호', '아동간호', '모성간호', '정신간호', '지역사회간호'],
+        'pharmacy': ['임상약학', '약물치료학', '약제학', '생약학', '독성학'],
+        'pediatrics': ['신생아학', '소아심장학', '소아신경학', '소아감염학', '소아내분비학'],
+        'obstetrics': ['산과학', '부인과학', '생식내분비학', '모체태아의학', '부인종양학'],
+        'psychiatry': ['일반정신의학', '아동정신의학', '노인정신의학', '중독정신의학', '법정신의학'],
+        'emergency': ['응급의학', '중환자의학', '독성학', '외상학', '재해의학']
+    };
+    
+    specialtySelect.innerHTML = '<option value="">세부 전공 선택</option>';
+    
+    if (subject && specialties[subject]) {
+        specialtySelect.disabled = false;
+        specialties[subject].forEach(specialty => {
+            const option = document.createElement('option');
+            option.value = specialty;
+            option.textContent = specialty;
+            specialtySelect.appendChild(option);
+        });
+    } else {
+        specialtySelect.disabled = true;
+    }
+}
+
+function updateQuestionSettings() {
+    updateEstimatedTime();
+}
+
+function addKeyword(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const input = event.target;
+        const keyword = input.value.trim();
+        
+        if (keyword) {
+            const tagsContainer = document.getElementById('keywordTags');
+            if (tagsContainer) {
+                const tag = document.createElement('span');
+                tag.className = 'keyword-tag';
+                tag.innerHTML = `
+                    ${keyword}
+                    <span class="remove" onclick="removeKeyword(this)">×</span>
+                `;
+                tagsContainer.appendChild(tag);
+                input.value = '';
+            }
+        }
+    }
+}
+
+function removeKeyword(element) {
+    element.parentElement.remove();
+}
+
+function switchMode(mode) {
+    const modes = document.querySelectorAll('.mode-btn');
+    const contents = document.querySelectorAll('.mode-content');
+    
+    modes.forEach(btn => btn.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+    
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+    document.getElementById(`${mode}Mode`).classList.add('active');
+}
+
+function toggleImageOptions() {
+    const checkbox = document.getElementById('includeImages');
+    const isChecked = checkbox.checked;
+    
+    // Add image-specific options if needed
+    console.log('Image options toggled:', isChecked);
+}
+
+function generateAdvancedQuestions() {
+    const btn = document.querySelector('.btn-generate');
+    const progressDiv = document.getElementById('generationProgress');
+    const resultDiv = document.getElementById('generationResult');
+    
+    if (!btn || !progressDiv) return;
+    
+    // Show loading state
+    btn.classList.add('loading');
+    btn.disabled = true;
+    
+    // Hide result and show progress
+    if (resultDiv) resultDiv.style.display = 'none';
+    progressDiv.style.display = 'block';
+    
+    // Simulate generation process
+    simulateGeneration();
+}
+
+function simulateGeneration() {
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const remainingTime = document.getElementById('remainingTime');
+    
+    const steps = [
+        { percent: 20, text: '의료 전문 지식 데이터베이스를 분석하고 있습니다...', time: 35 },
+        { percent: 50, text: '문제 구조를 설계하고 있습니다...', time: 25 },
+        { percent: 80, text: '품질 검증을 수행하고 있습니다...', time: 10 },
+        { percent: 100, text: '생성이 완료되었습니다!', time: 0 }
+    ];
+    
+    let currentStep = 0;
+    
+    const updateProgress = () => {
+        if (currentStep < steps.length) {
+            const step = steps[currentStep];
+            
+            if (progressFill) progressFill.style.width = `${step.percent}%`;
+            if (progressText) progressText.textContent = step.text;
+            if (progressPercent) progressPercent.textContent = `${step.percent}%`;
+            if (remainingTime) remainingTime.textContent = `${step.time}초`;
+            
+            // Update step indicators
+            const stepElements = document.querySelectorAll('.progress-steps .step');
+            if (stepElements[currentStep]) {
+                stepElements[currentStep].classList.add('active');
+            }
+            
+            currentStep++;
+            
+            if (currentStep < steps.length) {
+                setTimeout(updateProgress, 2000);
+            } else {
+                setTimeout(showGenerationResult, 1000);
+            }
+        }
+    };
+    
+    updateProgress();
+}
+
+function showGenerationResult() {
+    const progressDiv = document.getElementById('generationProgress');
+    const resultDiv = document.getElementById('generationResult');
+    const btn = document.querySelector('.btn-generate');
+    
+    if (progressDiv) progressDiv.style.display = 'none';
+    if (resultDiv) resultDiv.style.display = 'block';
+    
+    if (btn) {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+    
+    // Scroll to result
+    if (resultDiv) {
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function cancelGeneration() {
+    const progressDiv = document.getElementById('generationProgress');
+    const btn = document.querySelector('.btn-generate');
+    
+    if (progressDiv) progressDiv.style.display = 'none';
+    
+    if (btn) {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+function previewSettings() {
+    const settings = {
+        subject: document.getElementById('subject')?.value,
+        specialty: document.getElementById('specialty')?.value,
+        difficulty: document.getElementById('difficultySlider')?.value,
+        questionType: document.getElementById('questionType')?.value,
+        count: document.getElementById('count')?.value,
+        language: document.getElementById('language')?.value
+    };
+    
+    alert(`설정 미리보기:\n전공: ${settings.subject}\n난이도: ${settings.difficulty}\n문제 수: ${settings.count}`);
+}
+
+function saveAsTemplate() {
+    alert('템플릿이 저장되었습니다.');
+}
+
+function resetAdvancedForm() {
+    if (confirm('모든 설정을 초기화하시겠습니까?')) {
+        document.querySelectorAll('.generation-form input, .generation-form select, .generation-form textarea').forEach(element => {
+            if (element.type === 'checkbox') {
+                element.checked = false;
+            } else if (element.type === 'range') {
+                element.value = 5;
+            } else if (element.id === 'count') {
+                element.value = 1;
+            } else {
+                element.value = '';
+            }
+        });
+        
+        document.getElementById('keywordTags').innerHTML = '';
+        updateDifficultyDisplay(5);
+        updateEstimatedTime();
+    }
+}
+
+// Initialize mobile optimizations when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    addTouchSupport();
+    optimizeChartsForMobile();
+    
+    // Add event listeners for form enhancements
+    const difficultySlider = document.getElementById('difficultySlider');
+    if (difficultySlider) {
+        difficultySlider.addEventListener('input', (e) => updateDifficultyDisplay(e.target.value));
+    }
+    
+    const subjectSelect = document.getElementById('subject');
+    if (subjectSelect) {
+        subjectSelect.addEventListener('change', updateSpecialties);
+    }
+    
+    const questionTypeSelect = document.getElementById('questionType');
+    if (questionTypeSelect) {
+        questionTypeSelect.addEventListener('change', updateQuestionSettings);
+    }
+    
+    const countInput = document.getElementById('count');
+    if (countInput) {
+        countInput.addEventListener('change', updateEstimatedTime);
+    }
+    
+    // Initialize default values
+    updateEstimatedTime();
+});
+// 
+Show table scroll hint on mobile
+function showTableScrollHint() {
+    if (isMobile()) {
+        const hint = document.querySelector('.table-scroll-hint');
+        const table = document.querySelector('.performance-table table');
+        
+        if (hint && table && table.scrollWidth > table.clientWidth) {
+            hint.style.display = 'flex';
+            
+            // Hide hint after 5 seconds
+            setTimeout(() => {
+                hint.style.display = 'none';
+            }, 5000);
+        }
+    }
+}
+
+// Add scroll event listener to performance table
+function addTableScrollListener() {
+    const tableContainer = document.querySelector('.performance-table');
+    if (tableContainer && isMobile()) {
+        let isScrolling = false;
+        
+        tableContainer.addEventListener('scroll', function() {
+            if (!isScrolling) {
+                const hint = document.querySelector('.table-scroll-hint');
+                if (hint) {
+                    hint.style.display = 'none';
+                }
+                isScrolling = true;
+            }
+        });
+    }
+}
+
+// Enhanced mobile detection with user agent
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isMobile();
+}
+
+// Optimize page loading for mobile
+function optimizeForMobile() {
+    if (isMobileDevice()) {
+        // Add mobile class to body
+        document.body.classList.add('mobile-device');
+        
+        // Optimize images loading
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.loading = 'lazy';
+        });
+        
+        // Show table scroll hint
+        setTimeout(showTableScrollHint, 1000);
+        addTableScrollListener();
+        
+        // Optimize chart rendering
+        optimizeChartsForMobile();
+    }
+}
+
+// Call mobile optimization when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    optimizeForMobile();
+});
+
+// Re-optimize when window is resized
+window.addEventListener('resize', function() {
+    optimizeChartsForMobile();
+    if (isMobile()) {
+        showTableScrollHint();
+    }
+});// Sw
+ipe gesture support for mobile navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleSwipeGesture() {
+    const swipeThreshold = 50;
+    const swipeDistance = touchEndX - touchStartX;
+    
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            // Swipe right - could open mobile menu
+            if (isMobile() && !document.getElementById('mobileNavMenu').classList.contains('active')) {
+                toggleMobileNav();
+            }
+        } else {
+            // Swipe left - could close mobile menu
+            if (isMobile() && document.getElementById('mobileNavMenu').classList.contains('active')) {
+                closeMobileNav();
+            }
+        }
+    }
+}
+
+// Add swipe event listeners
+document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+}, { passive: true });
+
+// Prevent double-tap zoom on buttons
+document.addEventListener('touchend', function(e) {
+    if (e.target.matches('.btn, .nav-item, .mode-btn')) {
+        e.preventDefault();
+    }
+});
+
+// Optimize scroll performance on mobile
+let ticking = false;
+
+function updateScrollPosition() {
+    // Add scroll-based optimizations here if needed
+    ticking = false;
+}
+
+document.addEventListener('scroll', function() {
+    if (!ticking && isMobile()) {
+        requestAnimationFrame(updateScrollPosition);
+        ticking = true;
+    }
+}, { passive: true });
+
+// Mobile-specific form validation
+function validateMobileForm(formElement) {
+    const inputs = formElement.querySelectorAll('input[required], select[required], textarea[required]');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.style.borderColor = '#e74c3c';
+            isValid = false;
+            
+            // Show mobile-friendly error message
+            if (isMobile()) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'mobile-error-msg';
+                errorMsg.textContent = '이 필드는 필수입니다';
+                errorMsg.style.cssText = `
+                    color: #e74c3c;
+                    font-size: 12px;
+                    margin-top: 5px;
+                    animation: fadeIn 0.3s ease;
+                `;
+                
+                // Remove existing error message
+                const existingError = input.parentNode.querySelector('.mobile-error-msg');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                input.parentNode.appendChild(errorMsg);
+                
+                // Remove error message when user starts typing
+                input.addEventListener('input', function() {
+                    this.style.borderColor = '';
+                    const errorMsg = this.parentNode.querySelector('.mobile-error-msg');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
+                }, { once: true });
+            }
+        } else {
+            input.style.borderColor = '';
+        }
+    });
+    
+    return isValid;
+}
+
+// Mobile-friendly notifications
+function showMobileNotification(message, type = 'info', duration = 3000) {
+    const notification = document.createElement('div');
+    notification.className = `mobile-notification ${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#667eea'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideDown 0.3s ease;
+        max-width: 90%;
+        text-align: center;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideUp 0.3s ease forwards';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, duration);
+}
+
+// Add CSS animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
+
+// Enhanced mobile menu with keyboard navigation
+function enhanceMobileNavigation() {
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-menu .nav-item');
+    
+    mobileNavItems.forEach((item, index) => {
+        item.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const nextItem = mobileNavItems[index + 1] || mobileNavItems[0];
+                nextItem.focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prevItem = mobileNavItems[index - 1] || mobileNavItems[mobileNavItems.length - 1];
+                prevItem.focus();
+            } else if (e.key === 'Escape') {
+                closeMobileNav();
+            }
+        });
+    });
+}
+
+// Initialize enhanced mobile features
+document.addEventListener('DOMContentLoaded', function() {
+    enhanceMobileNavigation();
+    
+    // Add mobile-specific event listeners
+    if (isMobileDevice()) {
+        // Prevent context menu on long press for better UX
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.matches('.btn, .nav-item, .mode-btn, .metric-card')) {
+                e.preventDefault();
+            }
+        });
+        
+        // Add haptic feedback simulation (visual feedback)
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.matches('.btn, .nav-item, .mode-btn')) {
+                e.target.style.opacity = '0.8';
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', function(e) {
+            if (e.target.matches('.btn, .nav-item, .mode-btn')) {
+                setTimeout(() => {
+                    e.target.style.opacity = '';
+                }, 150);
+            }
+        }, { passive: true });
+    }
+});
+
+// Mobile performance monitoring
+function monitorMobilePerformance() {
+    if (isMobileDevice() && 'performance' in window) {
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry) => {
+                if (entry.entryType === 'navigation') {
+                    console.log('Mobile page load time:', entry.loadEventEnd - entry.loadEventStart, 'ms');
+                }
+            });
+        });
+        
+        observer.observe({ entryTypes: ['navigation'] });
+    }
+}
+
+// Initialize performance monitoring
+monitorMobilePerformance();

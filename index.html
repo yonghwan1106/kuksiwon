@@ -53,6 +53,9 @@
                 </nav>
             </div>
             <div class="header-right">
+                <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="user-menu">
                     <div class="notifications">
                         <i class="fas fa-bell"></i>
@@ -67,6 +70,29 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <nav class="nav-menu">
+            <a href="#dashboard" class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard'); closeMobileNav(); return false;">
+                <i class="fas fa-chart-line"></i>
+                <span>대시보드</span>
+            </a>
+            <a href="#generator" class="nav-item" data-page="generator" onclick="switchPage('generator'); closeMobileNav(); return false;">
+                <i class="fas fa-robot"></i>
+                <span>AI 문제생성</span>
+            </a>
+            <a href="#review" class="nav-item" data-page="review" onclick="switchPage('review'); closeMobileNav(); return false;">
+                <i class="fas fa-clipboard-check"></i>
+                <span>검토·승인</span>
+            </a>
+            <a href="#analytics" class="nav-item" data-page="analytics" onclick="switchPage('analytics'); closeMobileNav(); return false;">
+                <i class="fas fa-chart-pie"></i>
+                <span>분석·통계</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -228,6 +254,10 @@
                         </select>
                     </div>
                     <div class="performance-table">
+                    <div class="table-scroll-hint" style="display: none;">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>좌우로 스크롤하여 더 많은 정보를 확인하세요</span>
+                    </div>
                         <table>
                             <thead>
                                 <tr>
