@@ -32,6 +32,18 @@ function setupNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     const pages = document.querySelectorAll('.page');
     
+    // Pre-load all pages content when navigation is set up
+    console.log('Setting up navigation and pre-loading pages...');
+    setTimeout(() => {
+        console.log('Loading generator page...');
+        loadGeneratorPage();
+        console.log('Loading review page...');
+        loadReviewPage();
+        console.log('Loading analytics page...');
+        loadAnalyticsPage();
+        console.log('All pages pre-loaded successfully');
+    }, 100);
+    
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
@@ -50,20 +62,47 @@ function setupNavigation() {
             if (targetPage) {
                 targetPage.classList.add('active');
                 
-                // Load page-specific content
+                // Load page-specific content if needed
                 switch(pageId) {
                     case 'generator':
-                        loadGeneratorPage();
+                        // Ensure generator page content is loaded
+                        console.log('Switching to generator page');
+                        if (!targetPage.querySelector('.generator-container')) {
+                            console.log('Generator content not found, loading...');
+                            loadGeneratorPage();
+                        }
                         break;
                     case 'review':
-                        loadReviewPage();
+                        // Ensure review page content is loaded
+                        console.log('Switching to review page');
+                        if (!targetPage.querySelector('.review-container')) {
+                            console.log('Review content not found, loading...');
+                            loadReviewPage();
+                        }
                         break;
                     case 'analytics':
-                        loadAnalyticsPage();
+                        // Ensure analytics page content is loaded
+                        console.log('Switching to analytics page');
+                        if (!targetPage.querySelector('.analytics-container')) {
+                            console.log('Analytics content not found, loading...');
+                            loadAnalyticsPage();
+                        }
+                        // Refresh charts when analytics page is shown
+                        setTimeout(() => {
+                            if (typeof setupAnalyticsCharts === 'function') {
+                                setupAnalyticsCharts();
+                            }
+                        }, 200);
                         break;
                     default:
+                        console.log('Switching to dashboard page');
                         loadDashboard();
                 }
+                
+                // Scroll to top of the page
+                window.scrollTo(0, 0);
+            } else {
+                console.error(`Page element not found: ${pageId}-page`);
             }
         });
     });
@@ -241,8 +280,13 @@ function setupCharts() {
 }
 
 function loadGeneratorPage() {
+    console.log('loadGeneratorPage called');
     const generatorPage = document.getElementById('generator-page');
-    if (!generatorPage) return;
+    if (!generatorPage) {
+        console.error('Generator page element not found!');
+        return;
+    }
+    console.log('Generator page element found, loading content...');
     
     generatorPage.innerHTML = `
         <div class="page-header">
@@ -602,13 +646,19 @@ function loadGeneratorPage() {
     `;
     
     // Initialize advanced generator features
+    console.log('Generator page content loaded successfully');
     initializeAdvancedGenerator();
     addAdvancedGeneratorStyles();
 }
 
 function loadReviewPage() {
+    console.log('loadReviewPage called');
     const reviewPage = document.getElementById('review-page');
-    if (!reviewPage) return;
+    if (!reviewPage) {
+        console.error('Review page element not found!');
+        return;
+    }
+    console.log('Review page element found, loading content...');
     
     reviewPage.innerHTML = `
         <div class="page-header">
@@ -840,13 +890,19 @@ function loadReviewPage() {
     `;
     
     // Initialize advanced review features
+    console.log('Review page content loaded successfully');
     initializeAdvancedReview();
     addAdvancedReviewStyles();
 }
 
 function loadAnalyticsPage() {
+    console.log('loadAnalyticsPage called');
     const analyticsPage = document.getElementById('analytics-page');
-    if (!analyticsPage) return;
+    if (!analyticsPage) {
+        console.error('Analytics page element not found!');
+        return;
+    }
+    console.log('Analytics page element found, loading content...');
     
     analyticsPage.innerHTML = `
         <div class="page-header">
@@ -911,6 +967,7 @@ function loadAnalyticsPage() {
     `;
     
     // Setup analytics charts
+    console.log('Analytics page content loaded successfully');
     setTimeout(() => {
         setupAnalyticsCharts();
     }, 100);
