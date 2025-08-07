@@ -5,8 +5,10 @@
   "main": "index.html",
   "scripts": {
     "start": "live-server --port=3000",
-    "build": "echo 'Build complete'",
-    "test": "echo 'No tests specified'"
+    "build": "echo 'Static build complete - ready for deployment'",
+    "test": "echo 'No tests specified'",
+    "dev": "live-server --port=3000 --open",
+    "deploy": "vercel --prod"
   },
   "keywords": [
     "AI",
