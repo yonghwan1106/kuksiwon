@@ -17,6 +17,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
+// Global function for inline onclick events
+function switchPage(pageId) {
+    console.log('switchPage called with:', pageId);
+    
+    // Remove active class from all nav items and pages
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    
+    navItems.forEach(nav => nav.classList.remove('active'));
+    pages.forEach(page => page.classList.remove('active'));
+    
+    // Add active class to clicked nav item
+    const clickedNav = document.querySelector(`[data-page="${pageId}"]`);
+    if (clickedNav) {
+        clickedNav.classList.add('active');
+    }
+    
+    // Show corresponding page
+    const targetPage = document.getElementById(`${pageId}-page`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        console.log(`Switched to ${pageId} page successfully`);
+        
+        // Load page-specific content if needed
+        switch(pageId) {
+            case 'generator':
+                console.log('Loading generator page content');
+                break;
+            case 'review':
+                console.log('Loading review page content');
+                break;
+            case 'analytics':
+                console.log('Loading analytics page content');
+                // Setup analytics charts if needed
+                setTimeout(() => {
+                    if (typeof setupAnalyticsCharts === 'function') {
+                        setupAnalyticsCharts();
+                    }
+                }, 200);
+                break;
+            default:
+                console.log('Loading dashboard page content');
+        }
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+    } else {
+        console.error(`Page element not found: ${pageId}-page`);
+    }
+}
+
 function initializeApp() {
     console.log('AI Question Generator Prototype - 한국보건의료인국가시험원');
     

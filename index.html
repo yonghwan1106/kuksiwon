@@ -34,19 +34,19 @@
             </div>
             <div class="header-center">
                 <nav class="nav-menu">
-                    <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <a href="#dashboard" class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard'); return false;">
                         <i class="fas fa-chart-line"></i>
                         <span>대시보드</span>
                     </a>
-                    <a href="#generator" class="nav-item" data-page="generator">
+                    <a href="#generator" class="nav-item" data-page="generator" onclick="switchPage('generator'); return false;">
                         <i class="fas fa-robot"></i>
                         <span>AI 문제생성</span>
                     </a>
-                    <a href="#review" class="nav-item" data-page="review">
+                    <a href="#review" class="nav-item" data-page="review" onclick="switchPage('review'); return false;">
                         <i class="fas fa-clipboard-check"></i>
                         <span>검토·승인</span>
                     </a>
-                    <a href="#analytics" class="nav-item" data-page="analytics">
+                    <a href="#analytics" class="nav-item" data-page="analytics" onclick="switchPage('analytics'); return false;">
                         <i class="fas fa-chart-pie"></i>
                         <span>분석·통계</span>
                     </a>
