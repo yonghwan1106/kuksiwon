@@ -1,0 +1,30 @@
+{
+  "name": "ai-question-generator-prototype",
+  "version": "1.0.0",
+  "description": "AI 기반 시험 문제 출제 지원 시스템 - 2025년도 한국보건의료인국가시험원 대국민 혁신제안 공모전 제출용",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "build": "echo 'Build complete'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "AI",
+    "Question Generation",
+    "Medical Exam",
+    "Korea Health Personnel Licensing Examination Institute",
+    "Innovation Contest",
+    "Prototype"
+  ],
+  "author": "박용환",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prototype/ai-question-generator"
+  },
+  "homepage": "https://ai-exam-generator.prototype.com"
+}

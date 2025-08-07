@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국보건의료인국가시험원 혁신제안서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c5aa0;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #2c5aa0;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .header .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-title {
+            background: #2c5aa0;
+            color: white;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+        
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .form-table th, .form-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .form-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            width: 25%;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .proposal-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border-left: 4px solid #2c5aa0;
+        }
+        
+        .section-header {
+            color: #2c5aa0;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 25px 0 10px 0;
+            padding-left: 10px;
+            border-left: 3px solid #2c5aa0;
+        }
+        
+        .content-box {
+            background: white;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .signature-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .disclaimer {
+            background: #e7f3ff;
+            padding: 15px;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .stat-box {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #2c5aa0;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>2025년 한국보건의료인국가시험원 대국민 혁신제안 공모전</h1>
+            <div class="subtitle">혁신제안 공모전 제안서 (국민제안)</div>
+        </div>
+
+        <!-- 제안서 기본정보 -->
+        <div class="form-section">
+            <div class="form-title">제안서</div>
+            
+            <table class="form-table">
+                <tr>
+                    <th>접수번호</th>
+                    <td>※ 미기재</td>
+                    <th>접수일자</th>
+                    <td>2025. 8. .</td>
+                </tr>
+                <tr>
+                    <th>공모분야</th>
+                    <td colspan="3">
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fair">
+                                <label for="fair">□ 공정상생</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="efficiency" checked>
+                                <label for="efficiency">☑ 업무효율</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="trust">
+                                <label for="trust">□ 국민신뢰</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="development">
+                                <label for="development">□ 기관발전</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>공동제안여부</th>
+                    <td colspan="3">
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="single" checked>
+                                <label for="single">☑ 단독제안</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="joint">
+                                <label for="joint">□ 공동제안</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="form-table">
+                <tr>
+                    <th rowspan="2">제안자</th>
+                    <th>성명</th>
+                    <th>생년월일</th>
+                    <th>연락처</th>
+                    <th>이메일</th>
+                </tr>
+                <tr>
+                    <td>박용환</td>
+                    <td>1970.11.6.</td>
+                    <td>010-7939-3123</td>
+                    <td>sanoramyun8@gmail.com</td>
+                </tr>
+            </table>
+
+            <table class="form-table">
+                <tr>
+                    <th>제안명</th>
+                    <td><strong>AI 기반 시험 문제 출제 지원 시스템</strong></td>
+                </tr>
+                <tr>
+                    <th>제안내용<br>(요약)</th>
+                    <td>
+                        머신러닝과 자연어처리 기술을 활용하여 의료인 국가시험 문제의 자동 생성, 난이도 조정, 품질 검증을 지원하는 지능형 시스템을 구축하여 출제위원의 업무 효율성을 50% 향상시키고 문제 품질의 일관성을 확보하는 혁신적 솔루션
+                    </td>
+                </tr>
+                <tr>
+                    <th>첨부</th>
+                    <td>
+                        1. (필수) 제안설명서<br>
+                        2. 참고자료
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 제안설명서 -->
+        <div class="form-section">
+            <div class="form-title">제안설명서</div>
+            
+            <div class="section-header">□ 현황 및 문제점</div>
+            <div class="content-box">
+                <p><strong>○ 출제 업무의 현황</strong></p>
+                <p>현재 국시원은 연간 의사, 치과의사, 한의사, 약사, 간호사 등 총 5개 직종의 국가시험을 실시하고 있으며, 각 시험마다 평균 300-400문항의 문제를 출제해야 합니다.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">2,000+</div>
+                        <div class="stat-label">연간 출제 문항 수</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">출제위원 참여 인원</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">6개월</div>
+                        <div class="stat-label">문제 출제 소요 기간</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3회</div>
+                        <div class="stat-label">평균 검토 횟수</div>
+                    </div>
+                </div>
+
+                <p><strong>○ 주요 문제점</strong></p>
+                <ul>
+                    <li><strong>높은 업무 부담:</strong> 출제위원들이 문제 작성, 검토, 수정에 과도한 시간 소요 (위원 1인당 월 평균 40시간)</li>
+                    <li><strong>품질 편차:</strong> 출제위원 개인의 역량에 따른 문제 품질 및 난이도 편차 발생</li>
+                    <li><strong>중복 문제:</strong> 과거 출제 문제와의 중복성 검토에 많은 시간 소요</li>
+                    <li><strong>표준화 부족:</strong> 문제 유형, 난이도, 출제 형식의 일관성 부족</li>
+                    <li><strong>신규 위원 교육:</strong> 출제 경험이 부족한 신규 위원의 적응 기간 장기화</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>핵심 문제:</strong> 수작업 중심의 출제 프로세스로 인한 비효율성과 품질 불일치 문제가 지속적으로 발생하고 있으며, 출제위원 확보와 관리에 어려움이 증가하고 있습니다.
+                </div>
+            </div>
+
+            <div class="section-header">□ 개선방안</div>
+            <div class="content-box">
+                <p><strong>○ AI 기반 출제 지원 시스템 구축</strong></p>
+                
+                <p><strong>1단계: 문제 생성 AI 모듈</strong></p>
+                <ul>
+                    <li><strong>학습 데이터 구축:</strong> 과거 10년간 출제된 모든 문제 데이터를 학습</li>
+                    <li><strong>자연어처리 기술:</strong> GPT 기반 언어모델을 의료 전문 용어로 특화 훈련</li>
+                    <li><strong>문제 자동 생성:</strong> 출제 기준과 난이도를 입력하면 초안 문제 자동 생성</li>
+                    <li><strong>보기 생성 AI:</strong> 정답과 오답 보기를 논리적으로 구성하는 알고리즘</li>
+                </ul>
+
+                <p><strong>2단계: 난이도 조정 시스템</strong></p>
+                <ul>
+                    <li><strong>IRT 모델 적용:</strong> 문항반응이론을 활용한 문제 난이도 자동 측정</li>
+                    <li><strong>예측 모델:</strong> 과거 데이터 기반으로 문제별 정답률 예측</li>
+                    <li><strong>균형 조정:</strong> 전체 시험의 난이도 분포를 자동으로 균형 조정</li>
+                </ul>
+
+                <p><strong>3단계: 품질 검증 모듈</strong></p>
+                <ul>
+                    <li><strong>중복성 검사:</strong> 벡터 유사도 분석으로 기존 문제와의 중복 자동 탐지</li>
+                    <li><strong>오류 검증:</strong> 문법, 의학적 정확성, 논리적 오류 자동 검증</li>
+                    <li><strong>가이드라인 준수:</strong> 출제 기준 및 형식 자동 검토</li>
+                </ul>
+
+                <p><strong>○ 시스템 구현 방안</strong></p>
+                <div class="proposal-content">
+                    <p><strong>기술 스택:</strong></p>
+                    <ul>
+                        <li>AI 엔진: OpenAI GPT-4 API + 의료 전문 Fine-tuning</li>
+                        <li>백엔드: Python Django + PostgreSQL</li>
+                        <li>프론트엔드: React.js + TypeScript</li>
+                        <li>클라우드: AWS EC2 + RDS + S3</li>
+                        <li>보안: OAuth 2.0 + 데이터 암호화</li>
+                    </ul>
+                </div>
+
+                <p><strong>○ 단계별 도입 계획</strong></p>
+                <ul>
+                    <li><strong>1단계 (3개월):</strong> 시스템 설계 및 기본 AI 모델 개발</li>
+                    <li><strong>2단계 (3개월):</strong> 파일럿 테스트 (간호사 시험 대상)</li>
+                    <li><strong>3단계 (6개월):</strong> 전 직종 확대 적용 및 시스템 고도화</li>
+                </ul>
+            </div>
+
+            <div class="section-header">□ 기대효과</div>
+            <div class="content-box">
+                <p><strong>○ 정량적 효과</strong></p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">50%</div>
+                        <div class="stat-label">출제위원 업무시간 단축</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3억원</div>
+                        <div class="stat-label">연간 인건비 절감</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-label">출제 기간 단축</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">품질 일관성 향상</div>
+                    </div>
+                </div>
+
+                <p><strong>○ 정성적 효과</strong></p>
+                <ul>
+                    <li><strong>업무 효율성 향상:</strong> 출제위원이 창의적 문제 개발에 더 집중 가능</li>
+                    <li><strong>품질 표준화:</strong> 모든 문제의 품질과 난이도 일관성 확보</li>
+                    <li><strong>신속한 대응:</strong> 긴급 시험 일정 변경 시 빠른 문제 준비 가능</li>
+                    <li><strong>데이터 축적:</strong> 문제 출제 패턴 분석을 통한 지속적 개선</li>
+                    <li><strong>위원 만족도:</strong> 반복적 업무 감소로 출제위원 참여 의욕 증진</li>
+                </ul>
+
+                <p><strong>○ 사회적 효과</strong></p>
+                <ul>
+                    <li><strong>시험 신뢰도 제고:</strong> 일관된 품질의 문제로 공정성 향상</li>
+                    <li><strong>수험생 만족도:</strong> 예측 가능한 난이도와 명확한 문제로 시험 준비 효율성 증대</li>
+                    <li><strong>의료계 발전:</strong> 더 나은 의료인 선발을 통한 의료 서비스 질 향상</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>핵심 성과:</strong> 연간 약 8,000시간의 출제위원 업무시간 절약과 3억원의 직접적 비용 절감 효과가 예상되며, 문제 품질의 표준화로 시험 신뢰도가 크게 향상될 것입니다.
+                </div>
+            </div>
+
+            <div class="section-header">□ 장애요인 및 극복방안</div>
+            <div class="content-box">
+                <p><strong>○ 예상 장애요인</strong></p>
+
+                <p><strong>1. 기술적 장애요인</strong></p>
+                <ul>
+                    <li><strong>의료 전문성:</strong> AI가 의학적 정확성을 완벽히 보장하기 어려움</li>
+                    <li><strong>한국어 처리:</strong> 의료 전문 용어의 정확한 자연어처리 한계</li>
+                    <li><strong>창의성 부족:</strong> AI 생성 문제의 창의성과 참신성 부족</li>
+                </ul>
+
+                <p><strong>2. 조직적 장애요인</strong></p>
+                <ul>
+                    <li><strong>출제위원 저항:</strong> 기존 출제위원들의 AI 도입 거부감</li>
+                    <li><strong>예산 확보:</strong> 초기 시스템 구축 비용 부담</li>
+                    <li><strong>법적 검토:</strong> AI 생성 문제의 법적 책임 소재 불분명</li>
+                </ul>
+
+                <p><strong>○ 극복방안</strong></p>
+
+                <p><strong>1. 기술적 극복방안</strong></p>
+                <div class="proposal-content">
+                    <ul>
+                        <li><strong>전문가 협업:</strong> AI는 초안 생성만 담당하고 최종 검토는 출제위원이 수행</li>
+                        <li><strong>점진적 학습:</strong> 의료진 피드백을 통한 지속적 AI 모델 개선</li>
+                        <li><strong>하이브리드 방식:</strong> AI 지원 + 인간 전문성 결합 모델 채택</li>
+                        <li><strong>품질 보증:</strong> 3단계 검증 프로세스 (AI → 출제위원 → 외부검토)</li>
+                    </ul>
+                </div>
+
+                <p><strong>2. 조직적 극복방안</strong></p>
+                <div class="proposal-content">
+                    <ul>
+                        <li><strong>단계적 도입:</strong> 파일럿 테스트 → 부분 도입 → 전면 확산</li>
+                        <li><strong>교육 프로그램:</strong> 출제위원 대상 AI 활용 교육 실시</li>
+                        <li><strong>인센티브 제공:</strong> AI 활용 우수 위원 포상 제도</li>
+                        <li><strong>투자 회수:</strong> 3년 내 비용 절감으로 투자 비용 회수 가능</li>
+                        <li><strong>법적 대비:</strong> AI 지원 도구로 명시하여 최종 책임은 출제위원이 담당</li>
+                    </ul>
+                </div>
+
+                <p><strong>○ 위험 관리 계획</strong></p>
+                <ul>
+                    <li><strong>백업 시스템:</strong> 기존 출제 방식 병행 운영으로 안정성 확보</li>
+                    <li><strong>보안 강화:</strong> 문제 유출 방지를 위한 강화된 보안 체계</li>
+                    <li><strong>지속적 모니터링:</strong> 시스템 성능과 문제 품질 실시간 모니터링</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>성공 전략:</strong> AI를 완전 대체 도구가 아닌 '지능형 보조 도구'로 포지셔닝하여 출제위원의 전문성을 보완하는 방향으로 접근함으로써 저항을 최소화하고 실용성을 극대화할 계획입니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 서명 및 제출 -->
+        <div class="signature-section">
+            <p>「혁신제안제도 운영 내규」 제11조에 따라 제안서를 제출합니다.</p>
+            <br>
+            <p><strong>2025년 8월 일</strong></p>
+            <br>
+            <p><strong>제안자: 박용환 (서명)</strong></p>
+            <br>
+            <p><strong>한국보건의료인국가시험원장 귀하</strong></p>
+        </div>
+
+        <!-- 고지사항 -->
+        <div class="disclaimer">
+            <p>본인이 제출한 본 제안서는 제5조2항의 각 호에 해당하지 않으며, 제안이 채택된 후 제5조2항의 각 호에 해당하는 사항이 발견된 경우에는 제안의 효력 상실에 어떠한 이의도 없습니다.</p>
+        </div>
+    </div>
+</body>
+</html>
