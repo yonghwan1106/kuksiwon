@@ -34,4 +34,3 @@ logs
 
 # Claude Code settings (keep local only)
 .claude/settings.local.json
-.vercel
