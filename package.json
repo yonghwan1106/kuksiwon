@@ -1,32 +1,47 @@
 {
   "name": "ai-question-generator-prototype",
-  "version": "1.0.0",
-  "description": "AI 기반 시험 문제 출제 지원 시스템 - 2025년도 한국보건의료인국가시험원 대국민 혁신제안 공모전 제출용",
+  "version": "2.0.0",
+  "description": "AI 기반 시험 문제 출제 지원 시스템 v2.0 - Gemini API 통합 버전",
   "main": "index.html",
+  "type": "module",
   "scripts": {
-    "start": "live-server --port=3000",
-    "build": "echo 'Static build complete - ready for deployment'",
+    "start": "node server/app.js",
+    "dev": "concurrently \"node server/app.js\" \"live-server --port=3001 --proxy=/api:http://localhost:3000\"",
+    "build": "echo 'Building production version...' && npm run build:client",
+    "build:client": "echo 'Client build complete'",
     "test": "echo 'No tests specified'",
-    "dev": "live-server --port=3000 --open",
     "deploy": "vercel --prod"
   },
   "keywords": [
     "AI",
-    "Question Generation",
+    "Question Generation", 
     "Medical Exam",
+    "Gemini API",
+    "Real-time Collaboration",
     "Korea Health Personnel Licensing Examination Institute",
     "Innovation Contest",
-    "Prototype"
+    "Enhanced Prototype"
   ],
   "author": "박용환",
   "license": "MIT",
   "dependencies": {
+    "@google/generative-ai": "^0.19.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "ws": "^8.14.2",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.3.1",
     "live-server": "^1.2.2"
   },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/prototype/ai-question-generator"
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
   },
-  "homepage": "https://ai-exam-generator.prototype.com"
+  "repository": {
+    "type": "git", 
+    "url": "https://github.com/yonghwan1106/kuksiwon.git"
+  },
+  "homepage": "https://kuksiwon.vercel.app"
 }
