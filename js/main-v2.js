@@ -5,15 +5,18 @@
 
 // Application Configuration
 const APP_CONFIG = {
-    apiBaseUrl: window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : '/api',
-    wsUrl: window.location.hostname === 'localhost' ? 'ws://localhost:3000/ws' : `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`,
+    // Check if we're in development mode (port 3000 or 3001)
+    apiBaseUrl: (window.location.port === '3001' || window.location.hostname === 'localhost') ? 'http://localhost:3000/api' : '/api',
+    wsUrl: (window.location.port === '3001' || window.location.hostname === 'localhost') ? 'ws://localhost:3000/ws' : `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`,
     version: '2.0.0',
     features: {
         realTimeCollaboration: true,
         aiGeneration: true,
         offlineSupport: true,
         notifications: true
-    }
+    },
+    // Add fallback mode for when backend is not available
+    mockMode: false
 };
 
 // Application State
@@ -55,10 +58,155 @@ class APIService {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
-            return await response.json();
+            const text = await response.text();
+            
+            // Check if response is HTML (indicates server not running or wrong endpoint)
+            if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+                console.warn(`API endpoint ${endpoint} returned HTML instead of JSON - server may not be running`);
+                APP_CONFIG.mockMode = true;
+                return this.getMockResponse(endpoint);
+            }
+
+            return JSON.parse(text);
         } catch (error) {
             console.error(`API Error [${endpoint}]:`, error);
+            
+            // If it's a network error or CORS error, enable mock mode
+            if (error.name === 'TypeError' || error.message.includes('fetch')) {
+                console.warn('API server not available, switching to mock mode');
+                APP_CONFIG.mockMode = true;
+                return this.getMockResponse(endpoint);
+            }
+            
             throw error;
+        }
+    }
+
+    getMockResponse(endpoint) {
+        console.log(`🔄 Using mock data for ${endpoint}`);
+        
+        // Return mock data based on endpoint
+        switch(endpoint) {
+            case '/health':
+                return {
+                    status: 'OK (Mock)',
+                    version: '2.0.0',
+                    timestamp: new Date().toISOString(),
+                    uptime: 300,
+                    environment: 'development'
+                };
+                
+            case '/analytics/dashboard':
+                return {
+                    success: true,
+                    data: {
+                        overview: {
+                            totalQuestions: 1247,
+                            totalUsers: 89,
+                            activeSessions: 12,
+                            todayGenerated: 23,
+                            weeklyGrowth: 15.8,
+                            monthlyGrowth: 42.3
+                        },
+                        questionGeneration: {
+                            today: 23,
+                            yesterday: 19,
+                            thisWeek: 156,
+                            lastWeek: 134,
+                            thisMonth: 687,
+                            lastMonth: 543
+                        },
+                        aiPerformance: {
+                            averageQualityScore: 0.87,
+                            averageGenerationTime: 12.4,
+                            successRate: 0.94,
+                            enhancementRequests: 34
+                        },
+                        userActivity: {
+                            activeNow: 12,
+                            peakHour: '14:00',
+                            averageSessionTime: 45,
+                            collaborativeSessions: 8
+                        }
+                    }
+                };
+                
+            default:
+                // Handle AI generation endpoints
+                if (endpoint === '/ai/generate') {
+                    return {
+                        success: true,
+                        data: {
+                            id: 'mock-' + Date.now(),
+                            title: '급성 심근경색 환자의 초기 간호중재',
+                            content: '65세 남성 환자가 흉통을 호소하며 응급실에 내원했습니다. ECG에서 ST 상승이 관찰되고, 트로포닌 수치가 상승했습니다. 이 환자의 초기 간호중재로 가장 우선되는 것은?',
+                            choices: [
+                                {
+                                    id: 1,
+                                    text: '통증 완화를 위한 진통제 투여',
+                                    isCorrect: false,
+                                    explanation: '통증 완화는 중요하지만 최우선은 아닙니다.'
+                                },
+                                {
+                                    id: 2,
+                                    text: '산소포화도 모니터링 및 산소 공급',
+                                    isCorrect: true,
+                                    explanation: '심근산소공급 증가가 가장 우선되는 간호중재입니다.'
+                                },
+                                {
+                                    id: 3,
+                                    text: '혈압 측정 및 기록',
+                                    isCorrect: false,
+                                    explanation: '활력징후 확인은 중요하지만 최우선은 아닙니다.'
+                                },
+                                {
+                                    id: 4,
+                                    text: '가족에게 연락하기',
+                                    isCorrect: false,
+                                    explanation: '응급상황에서는 치료가 우선입니다.'
+                                },
+                                {
+                                    id: 5,
+                                    text: '환자 교육 시작',
+                                    isCorrect: false,
+                                    explanation: '급성기에는 즉각적인 치료가 우선입니다.'
+                                }
+                            ],
+                            overallExplanation: '급성 심근경색 환자의 초기 간호중재는 심근 산소 공급을 증가시키는 것이 가장 우선됩니다. 산소포화도를 모니터링하고 필요시 산소를 공급하여 심근의 저산소증을 방지해야 합니다.',
+                            references: ['대한간호학회 응급간호 가이드라인 2024'],
+                            clinicalPearls: ['급성 심근경색시 golden time은 90분', '산소포화도 94% 이하시 산소공급 필요'],
+                            relatedTopics: ['심전도 해석', '심장효소 수치', '혈전용해요법'],
+                            estimatedDifficulty: 0.7,
+                            estimatedAnswerTime: '2-3분',
+                            bloomTaxonomy: '적용',
+                            qualityScore: {
+                                overall: 0.89,
+                                medicalAccuracy: 0.92,
+                                languageQuality: 0.88,
+                                clinicalRelevance: 0.90
+                            },
+                            metadata: {
+                                aiModel: 'gemini-1.5-pro (Mock)',
+                                specialty: 'nursing',
+                                difficulty: 'medium',
+                                questionType: 'multiple_choice',
+                                generatedAt: new Date().toISOString(),
+                                language: 'korean'
+                            }
+                        },
+                        generation: {
+                            timeMs: 8500,
+                            model: 'gemini-1.5-pro (Mock)',
+                            timestamp: new Date().toISOString()
+                        }
+                    };
+                }
+                
+                return {
+                    success: false,
+                    error: 'Mock endpoint not implemented',
+                    endpoint: endpoint
+                };
         }
     }
 
@@ -155,6 +303,13 @@ class WebSocketService {
     }
 
     connect(userId, userName) {
+        // Skip WebSocket connection in mock mode or if server is not available
+        if (APP_CONFIG.mockMode) {
+            console.log('⚠️ WebSocket disabled in mock mode');
+            this.updateConnectionStatus('disconnected');
+            return;
+        }
+
         try {
             console.log('🔌 Connecting to WebSocket...', this.wsUrl);
             this.ws = new WebSocket(this.wsUrl);
@@ -185,12 +340,22 @@ class WebSocketService {
             this.ws.onclose = (event) => {
                 console.log('❌ WebSocket disconnected:', event.code, event.reason);
                 this.updateConnectionStatus('disconnected');
-                this.attemptReconnect();
+                
+                // Don't reconnect if in mock mode
+                if (!APP_CONFIG.mockMode) {
+                    this.attemptReconnect();
+                }
             };
 
             this.ws.onerror = (error) => {
                 console.error('❌ WebSocket error:', error);
                 this.updateConnectionStatus('error');
+                
+                // If WebSocket fails, likely server is not running
+                if (!APP_CONFIG.mockMode) {
+                    console.warn('WebSocket failed, enabling mock mode');
+                    APP_CONFIG.mockMode = true;
+                }
             };
 
             appState.ws = this;
@@ -198,6 +363,7 @@ class WebSocketService {
         } catch (error) {
             console.error('❌ Failed to connect WebSocket:', error);
             this.updateConnectionStatus('error');
+            APP_CONFIG.mockMode = true;
         }
     }
 
@@ -566,6 +732,26 @@ class UIManager {
         console.log('📝 Loading generator page...');
         // Initialize AI generation form
         this.setupGeneratorForm();
+        
+        // Update AI status panel based on mode
+        this.updateAIStatusPanel();
+    }
+    
+    updateAIStatusPanel() {
+        const statusElement = document.querySelector('.model-details .status');
+        const modelElement = document.querySelector('.model-details h4');
+        
+        if (statusElement && modelElement) {
+            if (APP_CONFIG.mockMode) {
+                statusElement.textContent = 'Demo Mode - Server Offline';
+                statusElement.className = 'status offline';
+                modelElement.textContent = 'Gemini 1.5 Pro (Demo)';
+            } else {
+                statusElement.textContent = 'Ready for generation';
+                statusElement.className = 'status online';
+                modelElement.textContent = 'Gemini 1.5 Pro';
+            }
+        }
     }
 
     setupGeneratorForm() {
@@ -608,6 +794,13 @@ class UIManager {
             
             if (response.success) {
                 console.log('✅ Question generated successfully');
+                
+                // Add mock indicator if in mock mode
+                if (APP_CONFIG.mockMode) {
+                    response.data.metadata.mode = 'mock';
+                    response.data.title = '[DEMO] ' + response.data.title;
+                }
+                
                 this.showGeneratedQuestion(response.data);
                 this.hideGenerationProgress();
             } else {
@@ -867,12 +1060,33 @@ document.addEventListener('DOMContentLoaded', function() {
     apiService.checkHealth()
         .then(response => {
             console.log('✅ API Health Check:', response);
+            
+            // Check if we got a mock response
+            if (response.status && response.status.includes('Mock')) {
+                console.log('🔄 Running in mock mode - server not available');
+                // Show mock mode indicator
+                wsService.showNotification(
+                    'Mock Mode Active', 
+                    'Backend server not running. Using demo data for testing.', 
+                    'info'
+                );
+            } else {
+                console.log('🔗 Backend server available - full features enabled');
+            }
+            
             // Initialize WebSocket connection
             wsService.connect(appState.currentUser.id, appState.currentUser.name);
         })
         .catch(error => {
             console.warn('⚠️ API Health Check failed:', error);
-            // Continue with offline mode
+            console.log('🔄 Running in offline mode');
+            
+            // Show offline mode notification
+            wsService.showNotification(
+                'Offline Mode', 
+                'No internet connection. Using cached data.', 
+                'info'
+            );
         });
 
     // Load initial page content

@@ -1913,6 +1913,12 @@ select {
     font-size: 12px;
 }
 
+.status.offline:before {
+    content: '●';
+    color: #f59e0b;
+    font-size: 12px;
+}
+
 .ai-stats {
     display: flex;
     gap: 32px;
