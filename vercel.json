@@ -4,9 +4,5 @@
     "api/**/*.js": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "GEMINI_API_KEY": "@gemini-api-key",
-    "NODE_ENV": "production"
   }
 }
