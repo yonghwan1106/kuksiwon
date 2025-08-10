@@ -10,13 +10,16 @@ This is an AI-powered exam question generation prototype for the Korea Health Pe
 
 ### Local Development
 ```bash
-# Start development server with live reload
-npm start
-# or
-npm run dev
+# Install dependencies
+npm install
 
-# Both commands start live-server on port 3000
+# Start development server with live reload
+npm run dev
+# This starts live-server on port 3000
 # Navigate to http://localhost:3000
+
+# Note: npm start outputs serverless info message
+npm start
 ```
 
 ### Building and Deployment
@@ -46,10 +49,12 @@ open index.html
 
 ### Technology Stack
 - **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
+- **Backend**: Vercel Serverless Functions (Node.js)
+- **AI Integration**: Google Gemini API (@google/generative-ai)
 - **Styling**: Custom CSS with CSS Grid/Flexbox, Google Fonts (Noto Sans KR)
 - **Charts**: Chart.js for data visualizations
 - **Icons**: Font Awesome 6.4.0
-- **Deployment**: Vercel with static site configuration
+- **Deployment**: Vercel with serverless functions configuration
 
 ### Application Structure
 
@@ -64,10 +69,17 @@ The application is a **Single Page Application (SPA)** with dynamic page switchi
 #### Key Files
 - `index.html`: Complete SPA with all page content, navigation structure
 - `js/main.js`: Application logic, navigation, page rendering, chart setup
+- `js/main-v2.js`: Enhanced version with additional features
 - `js/data.js`: Mock data definitions and utility functions
 - `mock_data.json`: Additional structured mock data for medical questions
 - `styles/main.css`: Comprehensive styling including responsive design
-- `vercel.json`: Deployment configuration for static hosting
+- `api/`: Vercel serverless functions directory
+  - `api/ai/generate.js`: AI question generation endpoint (Gemini API)
+  - `api/analytics/dashboard.js`: Analytics data endpoint
+  - `api/questions/index.js`: Question management endpoints
+  - `api/collaboration/rooms.js`: Collaboration features
+  - `api/health.js`: Health check endpoint
+- `vercel.json`: Deployment configuration for serverless functions
 
 ### Data Architecture
 
@@ -143,6 +155,47 @@ Dashboard metrics are controlled by `mockData.dashboardStats`. Charts are render
 ### Extending Analytics
 New chart types can be added in the `setupAnalyticsCharts()` function. Chart.js configuration allows for various medical data visualizations.
 
+## API Endpoints
+
+The serverless functions provide the following endpoints:
+
+### `/api/ai/generate` (POST)
+Generates medical exam questions using Google Gemini AI.
+
+**Request Body:**
+```javascript
+{
+  specialty: string,        // Medical specialty
+  difficulty: string,       // 'easy', 'medium', 'hard'
+  questionType: string,     // 'multiple_choice', 'scenario_based'
+  topic: string,           // Specific topic
+  keywords: string[],      // Related keywords
+  context: string          // Additional context
+}
+```
+
+**Response:**
+```javascript
+{
+  success: boolean,
+  question: {
+    title: string,
+    content: string,
+    choices: Array<{choice_text: string, is_correct: boolean, explanation: string}>,
+    explanation: string,
+    difficulty_level: number,
+    tags: string[],
+    references: string[]
+  }
+}
+```
+
+### Environment Variables
+- `GEMINI_API_KEY`: Google Gemini API key for AI question generation
+
+### Error Handling
+All API endpoints include proper error handling with appropriate HTTP status codes and CORS headers for cross-origin requests.
+
 ## Content Guidelines
 
 This is a **medical education prototype** for a government institution. All content should be:
@@ -151,11 +204,14 @@ This is a **medical education prototype** for a government institution. All cont
 - Aligned with Korean medical education standards
 - Professional and institutional in tone
 
-The prototype simulates a real AI-powered question generation system but uses static mock data for demonstration purposes. Future development would integrate with actual medical databases and AI APIs.
+The prototype demonstrates a real AI-powered question generation system using Google Gemini API integration. It combines mock data for UI demonstration with actual AI capabilities for question generation. The serverless architecture allows for scalable deployment while maintaining the prototype's demonstration purpose.
 
 ## Deployment Notes
 
-- Configured for Vercel static hosting
-- No build process required (vanilla HTML/CSS/JS)
-- All assets are referenced via CDN (Chart.js, Font Awesome, Google Fonts)
-- Mock data is embedded in JavaScript files, no external API dependencies
+- Configured for Vercel serverless functions hosting
+- No build process required for frontend (vanilla HTML/CSS/JS)
+- All frontend assets are referenced via CDN (Chart.js, Font Awesome, Google Fonts)
+- Backend API functions require GEMINI_API_KEY environment variable
+- Functions have 30-second timeout limit as configured in vercel.json
+- CORS headers are configured for cross-origin requests
+- Mock data is embedded in JavaScript files, with AI generation available via serverless functions
