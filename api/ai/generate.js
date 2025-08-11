@@ -2,9 +2,11 @@
  * Vercel Serverless Function - AI Question Generation
  */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Anthropic from '@anthropic-ai/sdk';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const anthropic = new Anthropic({
+    apiKey: process.env.CLAUDE_API_KEY,
+});
 
 export default async function handler(req, res) {
     // CORS headers
@@ -39,9 +41,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // Gemini AI 모델 초기화
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
-
         // 프롬프트 생성
         const prompt = buildPrompt({
             specialty,
@@ -52,12 +51,15 @@ export default async function handler(req, res) {
             learningObjectives
         });
 
-        console.log('🧠 Generating question with Gemini AI...');
+        console.log('🧠 Generating question with Claude AI...');
 
         const startTime = Date.now();
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await anthropic.messages.create({
+            model: 'claude-3-5-sonnet-20241022',
+            max_tokens: 4000,
+            messages: [{ role: 'user', content: prompt }]
+        });
+        const text = response.content[0].text;
         const generationTime = Date.now() - startTime;
 
         // JSON 파싱
@@ -71,7 +73,7 @@ export default async function handler(req, res) {
 
         // 메타데이터 추가
         questionData.metadata = {
-            aiModel: 'gemini-1.5-pro',
+            aiModel: 'claude-3-5-sonnet-20241022',
             specialty,
             difficulty,
             questionType,
@@ -95,7 +97,7 @@ export default async function handler(req, res) {
             data: questionData,
             generation: {
                 timeMs: generationTime,
-                model: 'gemini-1.5-pro',
+                model: 'claude-3-5-sonnet-20241022',
                 timestamp: new Date().toISOString()
             }
         });

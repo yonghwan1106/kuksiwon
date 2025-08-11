@@ -50,7 +50,7 @@ open index.html
 ### Technology Stack
 - **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend**: Vercel Serverless Functions (Node.js)
-- **AI Integration**: Google Gemini API (@google/generative-ai)
+- **AI Integration**: Claude API (@anthropic-ai/sdk)
 - **Styling**: Custom CSS with CSS Grid/Flexbox, Google Fonts (Noto Sans KR)
 - **Charts**: Chart.js for data visualizations
 - **Icons**: Font Awesome 6.4.0
@@ -74,7 +74,7 @@ The application is a **Single Page Application (SPA)** with dynamic page switchi
 - `mock_data.json`: Additional structured mock data for medical questions
 - `styles/main.css`: Comprehensive styling including responsive design
 - `api/`: Vercel serverless functions directory
-  - `api/ai/generate.js`: AI question generation endpoint (Gemini API)
+  - `api/ai/generate.js`: AI question generation endpoint (Claude API)
   - `api/analytics/dashboard.js`: Analytics data endpoint
   - `api/questions/index.js`: Question management endpoints
   - `api/collaboration/rooms.js`: Collaboration features
@@ -160,7 +160,7 @@ New chart types can be added in the `setupAnalyticsCharts()` function. Chart.js 
 The serverless functions provide the following endpoints:
 
 ### `/api/ai/generate` (POST)
-Generates medical exam questions using Google Gemini AI.
+Generates medical exam questions using Claude AI.
 
 **Request Body:**
 ```javascript
@@ -191,7 +191,7 @@ Generates medical exam questions using Google Gemini AI.
 ```
 
 ### Environment Variables
-- `GEMINI_API_KEY`: Google Gemini API key for AI question generation
+- `CLAUDE_API_KEY`: Claude API key for AI question generation
 
 ### Error Handling
 All API endpoints include proper error handling with appropriate HTTP status codes and CORS headers for cross-origin requests.
@@ -204,14 +204,15 @@ This is a **medical education prototype** for a government institution. All cont
 - Aligned with Korean medical education standards
 - Professional and institutional in tone
 
-The prototype demonstrates a real AI-powered question generation system using Google Gemini API integration. It combines mock data for UI demonstration with actual AI capabilities for question generation. The serverless architecture allows for scalable deployment while maintaining the prototype's demonstration purpose.
+The prototype demonstrates a real AI-powered question generation system using Claude API integration. It combines mock data for UI demonstration with actual AI capabilities for question generation. The serverless architecture allows for scalable deployment while maintaining the prototype's demonstration purpose.
 
 ## Deployment Notes
 
 - Configured for Vercel serverless functions hosting
 - No build process required for frontend (vanilla HTML/CSS/JS)
 - All frontend assets are referenced via CDN (Chart.js, Font Awesome, Google Fonts)
-- Backend API functions require GEMINI_API_KEY environment variable
+- Backend API functions require CLAUDE_API_KEY environment variable
 - Functions have 30-second timeout limit as configured in vercel.json
 - CORS headers are configured for cross-origin requests
 - Mock data is embedded in JavaScript files, with AI generation available via serverless functions
+- CLAUDE_API_KEY environment variable must be set for AI generation functionality

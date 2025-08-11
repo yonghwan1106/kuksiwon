@@ -15,7 +15,7 @@
     "AI",
     "Question Generation", 
     "Medical Exam",
-    "Gemini API",
+    "Claude API",
     "Vercel Serverless",
     "Korea Health Personnel Licensing Examination Institute",
     "Innovation Contest",
@@ -24,7 +24,7 @@
   "author": "박용환",
   "license": "MIT",
   "dependencies": {
-    "@google/generative-ai": "^0.19.0"
+    "@anthropic-ai/sdk": "^0.24.3"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
