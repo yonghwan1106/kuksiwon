@@ -1,6 +1,6 @@
 /**
  * AI Question Generator v2.0 - Enhanced Client Application
- * Real-time Collaboration & Gemini AI Integration
+ * Real-time Collaboration & Claude AI Integration
  */
 
 // Application Configuration
@@ -186,7 +186,7 @@ class APIService {
                                 clinicalRelevance: 0.90
                             },
                             metadata: {
-                                aiModel: 'gemini-1.5-pro (Mock)',
+                                aiModel: 'claude-3-5-sonnet-20241022 (Mock)',
                                 specialty: 'nursing',
                                 difficulty: 'medium',
                                 questionType: 'multiple_choice',
@@ -196,7 +196,7 @@ class APIService {
                         },
                         generation: {
                             timeMs: 8500,
-                            model: 'gemini-1.5-pro (Mock)',
+                            model: 'claude-3-5-sonnet-20241022 (Mock)',
                             timestamp: new Date().toISOString()
                         }
                     };
@@ -745,11 +745,11 @@ class UIManager {
             if (APP_CONFIG.mockMode) {
                 statusElement.textContent = 'Demo Mode - Server Offline';
                 statusElement.className = 'status offline';
-                modelElement.textContent = 'Gemini 1.5 Pro (Demo)';
+                modelElement.textContent = 'Claude 3.5 Sonnet (Demo)';
             } else {
                 statusElement.textContent = 'Ready for generation';
                 statusElement.className = 'status online';
-                modelElement.textContent = 'Gemini 1.5 Pro';
+                modelElement.textContent = 'Claude 3.5 Sonnet';
             }
         }
     }
@@ -786,7 +786,7 @@ class UIManager {
         };
 
         try {
-            console.log('🧠 Generating question with Gemini AI...', params);
+            console.log('🧠 Generating question with Claude AI...', params);
             appState.isGenerating = true;
             this.showGenerationProgress();
 
@@ -823,7 +823,7 @@ class UIManager {
                 <div class="generation-progress">
                     <div class="progress-header">
                         <h3>🧠 AI 문제 생성 중...</h3>
-                        <p>Gemini AI가 고품질 의료시험 문제를 생성하고 있습니다.</p>
+                        <p>Claude AI가 고품질 의료시험 문제를 생성하고 있습니다.</p>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
@@ -944,6 +944,15 @@ class UIManager {
             if (response.success) {
                 wsService.showNotification('Success', 'Question saved successfully!', 'success');
                 appState.questions.push(response.data);
+                
+                // Hide the generation result container after saving
+                const resultContainer = document.querySelector('.generation-result');
+                if (resultContainer) {
+                    resultContainer.classList.remove('visible');
+                }
+                
+                // Reset the generation state
+                appState.isGenerating = false;
             }
         } catch (error) {
             console.error('❌ Failed to save question:', error);
