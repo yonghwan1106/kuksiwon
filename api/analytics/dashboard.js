@@ -15,10 +15,13 @@ export default function handler(req, res) {
     if (req.method === 'GET') {
         // Mock analytics data
         const mockData = {
-            totalQuestions: 1247,
-            questionsToday: 23,
+            overview: {
+                totalQuestions: 1247,
+                totalUsers: 156,
+                activeSessions: 23,
+                todayGenerated: 23
+            },
             avgQualityScore: 0.87,
-            activeUsers: 45,
             questionTypes: {
                 multiple_choice: 67,
                 scenario_based: 23,
