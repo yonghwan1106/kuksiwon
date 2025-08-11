@@ -979,26 +979,38 @@ class UIManager {
     }
 
     closeGenerationResult() {
+        // Prevent multiple executions
+        if (this._closing) {
+            console.log('⚠️ Close already in progress, ignoring...');
+            return;
+        }
+        
+        this._closing = true;
         console.log('🔙 Closing generation result...');
         
-        // Hide the generation result container
+        // Get the result container
         const resultContainer = document.querySelector('.generation-result');
-        if (resultContainer) {
-            resultContainer.classList.remove('visible');
-            
-            // Clear the content with a smooth transition
-            setTimeout(() => {
-                resultContainer.innerHTML = '';
-            }, 300);
+        if (!resultContainer) {
+            this._closing = false;
+            return;
         }
+        
+        // Immediately disable all buttons in the result to prevent multiple clicks
+        const buttons = resultContainer.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.pointerEvents = 'none';
+        });
+        
+        // Hide the generation result container
+        resultContainer.classList.remove('visible');
         
         // Reset the generation state
         appState.isGenerating = false;
         
-        // Optional: Reset the form to allow new generation
+        // Reset the form to allow new generation
         const generatorForm = document.getElementById('question-generator-form');
         if (generatorForm) {
-            // Don't reset the form completely, just enable it
             const submitBtn = generatorForm.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.disabled = false;
@@ -1015,7 +1027,14 @@ class UIManager {
             });
         }
         
-        console.log('✅ Generation result closed successfully');
+        // Clear the content after transition and reset closing flag
+        setTimeout(() => {
+            if (resultContainer) {
+                resultContainer.innerHTML = '';
+            }
+            this._closing = false;
+            console.log('✅ Generation result closed successfully');
+        }, 500);
     }
 
     // Charts Setup
