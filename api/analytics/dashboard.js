@@ -19,9 +19,15 @@ export default function handler(req, res) {
                 totalQuestions: 1247,
                 totalUsers: 156,
                 activeSessions: 23,
-                todayGenerated: 23
+                todayGenerated: 23,
+                weeklyGrowth: 12.5,
+                monthlyGrowth: 34.8
             },
-            avgQualityScore: 0.87,
+            aiPerformance: {
+                averageQualityScore: 0.87,
+                averageGenerationTime: 8.5,
+                successRate: 0.94
+            },
             questionTypes: {
                 multiple_choice: 67,
                 scenario_based: 23,
