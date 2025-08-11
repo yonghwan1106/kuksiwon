@@ -912,6 +912,9 @@ class UIManager {
                         <button class="btn btn-outline" onclick="uiManager.shareQuestion('${questionData.id}')">
                             📤 공유하기
                         </button>
+                        <button class="btn btn-close" onclick="uiManager.closeGenerationResult()">
+                            ✕ 닫기
+                        </button>
                     </div>
                 </div>
             `;
@@ -973,6 +976,46 @@ class UIManager {
             `;
             element.classList.add('error');
         }
+    }
+
+    closeGenerationResult() {
+        console.log('🔙 Closing generation result...');
+        
+        // Hide the generation result container
+        const resultContainer = document.querySelector('.generation-result');
+        if (resultContainer) {
+            resultContainer.classList.remove('visible');
+            
+            // Clear the content with a smooth transition
+            setTimeout(() => {
+                resultContainer.innerHTML = '';
+            }, 300);
+        }
+        
+        // Reset the generation state
+        appState.isGenerating = false;
+        
+        // Optional: Reset the form to allow new generation
+        const generatorForm = document.getElementById('question-generator-form');
+        if (generatorForm) {
+            // Don't reset the form completely, just enable it
+            const submitBtn = generatorForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🧠 문제 생성';
+            }
+        }
+        
+        // Scroll back to the form for better UX
+        const generatorContainer = document.querySelector('.generator-container');
+        if (generatorContainer) {
+            generatorContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+        
+        console.log('✅ Generation result closed successfully');
     }
 
     // Charts Setup
