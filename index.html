@@ -658,71 +658,284 @@
                 <p>시스템 사용 현황과 성과를 다양한 차트와 지표로 분석하세요</p>
             </div>
             
+            <!-- Analytics Filter Controls -->
+            <div class="analytics-filters">
+                <div class="filter-group">
+                    <label>기간 선택</label>
+                    <select id="analytics-period" class="form-control">
+                        <option value="7">최근 7일</option>
+                        <option value="30" selected>최근 30일</option>
+                        <option value="90">최근 90일</option>
+                        <option value="365">최근 1년</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>전공 필터</label>
+                    <select id="analytics-specialty" class="form-control">
+                        <option value="all">전체 전공</option>
+                        <option value="internal_medicine">내과학</option>
+                        <option value="surgery">외과학</option>
+                        <option value="nursing">간호학</option>
+                        <option value="pharmacy">약학</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="refreshAnalytics()">
+                    <i class="fas fa-sync-alt"></i>
+                    새로고침
+                </button>
+            </div>
+
             <div class="analytics-container">
+                <!-- Summary Cards -->
+                <div class="analytics-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>3,247</h3>
+                            <p>총 문제 수</p>
+                            <span class="trend positive">+18.5% 이번 달</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon ai-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>1,456</h3>
+                            <p>AI 생성 문제</p>
+                            <span class="trend positive">+32.1% 이번 달</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>87</h3>
+                            <p>활성 출제위원</p>
+                            <span class="trend positive">+5명 증가</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>94.7%</h3>
+                            <p>품질 점수</p>
+                            <span class="trend positive">+2.3% 향상</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="analytics-grid">
-                    <div class="analytics-card">
+                    <!-- Monthly Trend Chart -->
+                    <div class="analytics-card large">
                         <div class="card-header">
                             <h3>월별 문제 생성 현황</h3>
+                            <div class="chart-legend">
+                                <span class="legend-item">
+                                    <span class="legend-color ai"></span>
+                                    AI 생성
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-color human"></span>
+                                    수동 작성
+                                </span>
+                            </div>
                         </div>
                         <div class="chart-container">
-                            <canvas id="monthlyTrendChart" width="400" height="200"></canvas>
+                            <canvas id="monthlyTrendChart" width="800" height="300"></canvas>
                         </div>
                     </div>
                     
+                    <!-- Difficulty Distribution -->
                     <div class="analytics-card">
                         <div class="card-header">
                             <h3>난이도 분포</h3>
                         </div>
                         <div class="chart-container">
-                            <canvas id="difficultyChart" width="300" height="200"></canvas>
+                            <canvas id="difficultyChart" width="300" height="250"></canvas>
                         </div>
                     </div>
-                    
+
+                    <!-- Subject Distribution -->
                     <div class="analytics-card">
                         <div class="card-header">
-                            <h3>과목별 문제 수</h3>
+                            <h3>과목별 분포</h3>
                         </div>
-                        <div class="performance-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">내과학</span>
-                                <span class="metric-value">720문제</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">외과학</span>
-                                <span class="metric-value">580문제</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">성인간호학</span>
-                                <span class="metric-value">650문제</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">약리학</span>
-                                <span class="metric-value">420문제</span>
-                            </div>
+                        <div class="chart-container">
+                            <canvas id="subjectChart" width="300" height="250"></canvas>
                         </div>
                     </div>
                     
+                    <!-- Weekly Activity -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>주간 활동 현황</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="weeklyChart" width="300" height="250"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Performance Metrics -->
                     <div class="analytics-card">
                         <div class="card-header">
                             <h3>시스템 성능 지표</h3>
                         </div>
                         <div class="performance-metrics">
                             <div class="metric-item">
-                                <span class="metric-label">평균 생성 시간</span>
-                                <span class="metric-value">28.3초</span>
+                                <div class="metric-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <span class="metric-value">18.7초</span>
+                                    <span class="metric-label">평균 생성 시간</span>
+                                </div>
+                                <div class="metric-change positive">-15%</div>
                             </div>
                             <div class="metric-item">
-                                <span class="metric-label">성공률</span>
-                                <span class="metric-value">94.2%</span>
+                                <div class="metric-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <span class="metric-value">96.8%</span>
+                                    <span class="metric-label">생성 성공률</span>
+                                </div>
+                                <div class="metric-change positive">+2.6%</div>
                             </div>
                             <div class="metric-item">
-                                <span class="metric-label">사용자 만족도</span>
-                                <span class="metric-value">4.2/5.0</span>
+                                <div class="metric-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <span class="metric-value">4.6/5.0</span>
+                                    <span class="metric-label">사용자 만족도</span>
+                                </div>
+                                <div class="metric-change positive">+0.4</div>
                             </div>
                             <div class="metric-item">
-                                <span class="metric-label">일일 활성 사용자</span>
-                                <span class="metric-value">23명</span>
+                                <div class="metric-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <span class="metric-value">156명</span>
+                                    <span class="metric-label">활성 사용자</span>
+                                </div>
+                                <div class="metric-change positive">+23</div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Performers -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>우수 출제위원 TOP 5</h3>
+                        </div>
+                        <div class="top-performers">
+                            <div class="performer-item">
+                                <div class="performer-rank">1</div>
+                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=32&h=32&fit=crop&crop=face" alt="김철수" class="performer-avatar">
+                                <div class="performer-info">
+                                    <span class="performer-name">김철수 교수</span>
+                                    <span class="performer-dept">내과학</span>
+                                </div>
+                                <div class="performer-score">98.5점</div>
+                            </div>
+                            <div class="performer-item">
+                                <div class="performer-rank">2</div>
+                                <img src="https://images.unsplash.com/photo-1594824723358-85883d3ece7d?w=32&h=32&fit=crop&crop=face" alt="이영희" class="performer-avatar">
+                                <div class="performer-info">
+                                    <span class="performer-name">이영희 교수</span>
+                                    <span class="performer-dept">외과학</span>
+                                </div>
+                                <div class="performer-score">96.8점</div>
+                            </div>
+                            <div class="performer-item">
+                                <div class="performer-rank">3</div>
+                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=32&h=32&fit=crop&crop=face" alt="박민정" class="performer-avatar">
+                                <div class="performer-info">
+                                    <span class="performer-name">박민정 교수</span>
+                                    <span class="performer-dept">간호학</span>
+                                </div>
+                                <div class="performer-score">94.2점</div>
+                            </div>
+                            <div class="performer-item">
+                                <div class="performer-rank">4</div>
+                                <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=32&h=32&fit=crop&crop=face" alt="정수현" class="performer-avatar">
+                                <div class="performer-info">
+                                    <span class="performer-name">정수현 교수</span>
+                                    <span class="performer-dept">약학</span>
+                                </div>
+                                <div class="performer-score">92.7점</div>
+                            </div>
+                            <div class="performer-item">
+                                <div class="performer-rank">5</div>
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" alt="최동훈" class="performer-avatar">
+                                <div class="performer-info">
+                                    <span class="performer-name">최동훈 교수</span>
+                                    <span class="performer-dept">치의학</span>
+                                </div>
+                                <div class="performer-score">91.4점</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question Types Distribution -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>문제 유형별 현황</h3>
+                        </div>
+                        <div class="question-types">
+                            <div class="type-item">
+                                <div class="type-bar">
+                                    <div class="type-fill" style="width: 65%"></div>
+                                </div>
+                                <div class="type-info">
+                                    <span class="type-name">객관식 5지선다</span>
+                                    <span class="type-count">2,111문제 (65%)</span>
+                                </div>
+                            </div>
+                            <div class="type-item">
+                                <div class="type-bar">
+                                    <div class="type-fill" style="width: 20%"></div>
+                                </div>
+                                <div class="type-info">
+                                    <span class="type-name">상황형 문제</span>
+                                    <span class="type-count">649문제 (20%)</span>
+                                </div>
+                            </div>
+                            <div class="type-item">
+                                <div class="type-bar">
+                                    <div class="type-fill" style="width: 10%"></div>
+                                </div>
+                                <div class="type-info">
+                                    <span class="type-name">증례 기반</span>
+                                    <span class="type-count">325문제 (10%)</span>
+                                </div>
+                            </div>
+                            <div class="type-item">
+                                <div class="type-bar">
+                                    <div class="type-fill" style="width: 5%"></div>
+                                </div>
+                                <div class="type-info">
+                                    <span class="type-name">계산 문제</span>
+                                    <span class="type-count">162문제 (5%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality Trends -->
+                    <div class="analytics-card large">
+                        <div class="card-header">
+                            <h3>품질 지표 추이</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="qualityTrendChart" width="800" height="250"></canvas>
                         </div>
                     </div>
                 </div>

@@ -641,6 +641,10 @@ class UIManager {
                 break;
             case 'analytics':
                 await this.loadAnalyticsPage();
+                // Set up analytics charts after page load
+                setTimeout(() => {
+                    setupAnalyticsCharts();
+                }, 100);
                 break;
         }
     }
@@ -874,6 +878,7 @@ class UIManager {
                         <div class="quality-score">
                             <span class="score">품질 점수: ${(questionData.qualityScore?.overall * 100 || 85).toFixed(1)}%</span>
                         </div>
+                        <button class="modal-close-btn" onclick="uiManager.closeGenerationResult()">&times;</button>
                     </div>
                     
                     <div class="question-content">
@@ -916,6 +921,13 @@ class UIManager {
                 </div>
             `;
             resultContainer.classList.add('visible');
+            
+            // Add background click handler to close modal
+            resultContainer.onclick = (e) => {
+                if (e.target === resultContainer) {
+                    this.closeGenerationResult();
+                }
+            };
         }
     }
 
@@ -924,7 +936,10 @@ class UIManager {
         if (resultContainer) {
             resultContainer.innerHTML = `
                 <div class="generation-error">
-                    <h3>❌ 문제 생성 실패</h3>
+                    <div class="error-header">
+                        <h3>❌ 문제 생성 실패</h3>
+                        <button class="modal-close-btn" onclick="uiManager.closeGenerationResult()">&times;</button>
+                    </div>
                     <p>${errorMessage}</p>
                     <button class="btn btn-primary" onclick="uiManager.retryGeneration()">
                         🔄 다시 시도
@@ -932,6 +947,23 @@ class UIManager {
                 </div>
             `;
             resultContainer.classList.add('visible');
+            
+            // Add background click handler to close modal
+            resultContainer.onclick = (e) => {
+                if (e.target === resultContainer) {
+                    this.closeGenerationResult();
+                }
+            };
+        }
+    }
+
+    closeGenerationResult() {
+        const resultContainer = document.getElementById('generation-result');
+        if (resultContainer) {
+            resultContainer.classList.remove('visible');
+            setTimeout(() => {
+                resultContainer.innerHTML = '';
+            }, 300);
         }
     }
 
@@ -1113,4 +1145,256 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 30000); // Refresh every 30 seconds
 
     console.log('✅ Application initialized successfully');
+    
+    // Set up analytics charts if on analytics page
+    if (document.getElementById('monthlyTrendChart')) {
+        setupAnalyticsCharts();
+    }
 });
+
+// Analytics functions
+function refreshAnalytics() {
+    console.log('Refreshing analytics...');
+    setupAnalyticsCharts();
+}
+
+function setupAnalyticsCharts() {
+    console.log('Setting up analytics charts...');
+    
+    // Monthly Trend Chart (Enhanced)
+    setupMonthlyTrendChart();
+    
+    // New charts
+    setupDifficultyChart();
+    setupSubjectChart();
+    setupWeeklyChart();
+    setupQualityTrendChart();
+}
+
+function setupMonthlyTrendChart() {
+    const ctx = document.getElementById('monthlyTrendChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'],
+            datasets: [{
+                label: 'AI 생성',
+                data: [45, 62, 78, 89, 125, 156, 189, 234],
+                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                borderColor: 'rgb(16, 185, 129)',
+                borderWidth: 1
+            }, {
+                label: '수동 작성',
+                data: [123, 145, 167, 134, 156, 178, 145, 189],
+                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function setupDifficultyChart() {
+    const ctx = document.getElementById('difficultyChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['하급', '중급', '상급'],
+            datasets: [{
+                data: [1247, 1456, 544],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+function setupSubjectChart() {
+    const ctx = document.getElementById('subjectChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['내과학', '외과학', '간호학', '약학', '치의학', '한의학'],
+            datasets: [{
+                data: [720, 580, 650, 420, 387, 243],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 101, 101, 0.8)',
+                    'rgba(251, 191, 36, 0.8)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(236, 72, 153, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 10
+                    }
+                }
+            }
+        }
+    });
+}
+
+function setupWeeklyChart() {
+    const ctx = document.getElementById('weeklyChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['월', '화', '수', '목', '금', '토', '일'],
+            datasets: [{
+                label: '문제 생성 수',
+                data: [45, 67, 89, 76, 93, 34, 23],
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function setupQualityTrendChart() {
+    const ctx = document.getElementById('qualityTrendChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'],
+            datasets: [{
+                label: '품질 점수',
+                data: [85.2, 87.1, 89.3, 91.2, 93.4, 94.1, 94.7, 95.2],
+                borderColor: 'rgb(16, 185, 129)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: '사용자 만족도',
+                data: [3.8, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6],
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    beginAtZero: false,
+                    min: 80,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    min: 0,
+                    max: 5,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+}
