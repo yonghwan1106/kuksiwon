@@ -58,12 +58,43 @@
                 </nav>
             </div>
             <div class="header-right">
+                <a href="index.html" class="demo-btn-header">
+                    <i class="fas fa-play"></i>
+                    데모 체험하기
+                </a>
                 <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <nav class="mobile-nav">
+            <a href="#hero" class="mobile-nav-item" onclick="scrollToSection('hero'); closeMobileNav();">
+                <i class="fas fa-home"></i>
+                <span>홈</span>
+            </a>
+            <a href="#features" class="mobile-nav-item" onclick="scrollToSection('features'); closeMobileNav();">
+                <i class="fas fa-star"></i>
+                <span>주요 기능</span>
+            </a>
+            <a href="#benefits" class="mobile-nav-item" onclick="scrollToSection('benefits'); closeMobileNav();">
+                <i class="fas fa-chart-line"></i>
+                <span>기대 효과</span>
+            </a>
+            <a href="#technology" class="mobile-nav-item" onclick="scrollToSection('technology'); closeMobileNav();">
+                <i class="fas fa-cogs"></i>
+                <span>기술 스택</span>
+            </a>
+            <a href="index.html" class="mobile-nav-item demo-link-mobile">
+                <i class="fas fa-play"></i>
+                <span>데모 체험하기</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- Hero Section -->
     <section id="hero" class="hero">

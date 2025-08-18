@@ -190,6 +190,30 @@ body {
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.demo-btn-header {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.demo-btn-header:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: white;
 }
 
 .mobile-nav-toggle {
@@ -206,6 +230,72 @@ body {
 
 .mobile-nav-toggle:hover {
     background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Navigation */
+.mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-nav-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3a8a, #1e40af);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    padding-top: 80px;
+}
+
+.mobile-nav-menu.active {
+    right: 0;
+}
+
+.mobile-nav {
+    padding: 20px;
+}
+
+.mobile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.mobile-nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.mobile-nav-item.demo-link-mobile {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    margin-top: 20px;
+}
+
+.mobile-nav-item.demo-link-mobile:hover {
+    background: linear-gradient(135deg, #059669, #047857);
 }
 
 /* Hero Section */
@@ -1099,11 +1189,15 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .mobile-menu-toggle {
+    .mobile-nav-toggle {
         display: block;
     }
     
     .nav-menu {
+        display: none;
+    }
+    
+    .demo-btn-header {
         display: none;
     }
     

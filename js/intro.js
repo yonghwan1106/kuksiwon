@@ -502,4 +502,45 @@ window.IntroPageApp = {
     initBenefitsChart
 };
 
+// Mobile Navigation Functions
+function toggleMobileNav() {
+    const overlay = document.getElementById('mobileNavOverlay');
+    const menu = document.getElementById('mobileNavMenu');
+    
+    if (overlay && menu) {
+        overlay.classList.toggle('active');
+        menu.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (menu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+}
+
+function closeMobileNav() {
+    const overlay = document.getElementById('mobileNavOverlay');
+    const menu = document.getElementById('mobileNavMenu');
+    
+    if (overlay && menu) {
+        overlay.classList.remove('active');
+        menu.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Make functions globally available
+window.toggleMobileNav = toggleMobileNav;
+window.closeMobileNav = closeMobileNav;
+window.scrollToSection = scrollToSection;
+
 console.log('📄 Intro page script loaded successfully');
