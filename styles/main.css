@@ -183,6 +183,18 @@ select {
     font-weight: 500;
 }
 
+.nav-item.intro-link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    margin-left: 10px;
+}
+
+.nav-item.intro-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
 .header-right {
     flex: 1;
     display: flex;
@@ -326,6 +338,21 @@ select {
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.btn-close {
+    background: #6b7280;
+    color: white;
+    border: 1px solid #9ca3af;
+    font-size: 13px;
+    padding: 10px 20px;
+    min-height: 40px;
+}
+
+.btn-close:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
 }
 
 /* Metrics Grid */

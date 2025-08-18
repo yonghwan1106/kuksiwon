@@ -50,6 +50,10 @@
                         <i class="fas fa-chart-pie"></i>
                         <span>분석·통계</span>
                     </a>
+                    <a href="intro.html" class="nav-item intro-link">
+                        <i class="fas fa-info-circle"></i>
+                        <span>프로젝트 소개</span>
+                    </a>
                 </nav>
             </div>
             <div class="header-right">
@@ -105,7 +109,7 @@
                     <p>AI 기반 출제 지원 시스템 현황을 한눈에 확인하세요</p>
                 </div>
                 <div class="dashboard-actions">
-                    <button class="btn btn-primary" onclick="showGenerator()">
+                    <button class="btn btn-primary" onclick="switchPage('generator')">
                         <i class="fas fa-plus"></i>
                         새 문제 생성
                     </button>
@@ -339,9 +343,9 @@
         <div id="generator-page" class="page">
             <div class="page-header">
                 <h2>🧠 AI 문제 생성 v2.0</h2>
-                <p>Gemini AI 기반 의료시험 문제 자동 생성 시스템</p>
+                <p>Claude AI 기반 의료시험 문제 자동 생성 시스템</p>
                 <div class="header-badge">
-                    <span class="badge badge-ai">Enhanced with Gemini AI</span>
+                    <span class="badge badge-ai">Enhanced with Claude AI</span>
                 </div>
             </div>
             
@@ -351,7 +355,7 @@
                     <div class="ai-model-info">
                         <i class="fas fa-brain"></i>
                         <div class="model-details">
-                            <h4>Gemini 1.5 Pro</h4>
+                            <h4>Claude 3.5 Sonnet</h4>
                             <span class="status online">Ready for generation</span>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 /**
  * AI Question Generator v2.0 - Enhanced Client Application
- * Real-time Collaboration & Gemini AI Integration
+ * Real-time Collaboration & Claude AI Integration
  */
 
 // Application Configuration
@@ -186,7 +186,7 @@ class APIService {
                                 clinicalRelevance: 0.90
                             },
                             metadata: {
-                                aiModel: 'gemini-1.5-pro (Mock)',
+                                aiModel: 'claude-3-5-sonnet-20241022 (Mock)',
                                 specialty: 'nursing',
                                 difficulty: 'medium',
                                 questionType: 'multiple_choice',
@@ -196,7 +196,7 @@ class APIService {
                         },
                         generation: {
                             timeMs: 8500,
-                            model: 'gemini-1.5-pro (Mock)',
+                            model: 'claude-3-5-sonnet-20241022 (Mock)',
                             timestamp: new Date().toISOString()
                         }
                     };
@@ -348,13 +348,18 @@ class WebSocketService {
             };
 
             this.ws.onerror = (error) => {
-                console.error('❌ WebSocket error:', error);
-                this.updateConnectionStatus('error');
+                console.warn('⚠️ WebSocket connection unavailable - using demo mode');
+                this.updateConnectionStatus('offline');
                 
-                // If WebSocket fails, likely server is not running
+                // Gracefully fallback to mock mode
                 if (!APP_CONFIG.mockMode) {
-                    console.warn('WebSocket failed, enabling mock mode');
+                    console.log('🎭 Enabling demo mode for offline functionality');
                     APP_CONFIG.mockMode = true;
+                    
+                    // Show user-friendly notification
+                    setTimeout(() => {
+                        this.showNotification('Info', 'Running in demo mode - all features available for testing', 'info');
+                    }, 1000);
                 }
             };
 
@@ -740,6 +745,115 @@ class UIManager {
         // Update AI status panel based on mode
         this.updateAIStatusPanel();
     }
+
+    async loadReviewPage() {
+        console.log('📋 Loading review page...');
+        
+        try {
+            // Load questions for review
+            const response = await apiService.getQuestions({ status: 'pending' });
+            
+            if (response.success) {
+                this.renderReviewQuestions(response.data);
+            } else {
+                // Fallback to mock data
+                this.renderReviewQuestions(mockData.questions.filter(q => q.status === 'pending'));
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to load review page:', error);
+            // Use mock data as fallback
+            this.renderReviewQuestions(mockData.questions.filter(q => q.status === 'pending'));
+        }
+    }
+
+    async loadAnalyticsPage() {
+        console.log('📊 Loading analytics page...');
+        
+        try {
+            // Load analytics data
+            const response = await apiService.getDashboardData();
+            
+            if (response.success) {
+                this.renderAnalytics(response.data);
+            } else {
+                // Fallback to mock analytics
+                this.renderAnalytics(mockData.analytics);
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to load analytics page:', error);
+            // Use mock data as fallback
+            this.renderAnalytics(mockData.analytics);
+        }
+    }
+
+    renderReviewQuestions(questions) {
+        console.log(`📋 Rendering ${questions.length} questions for review`);
+        // Implementation for rendering review questions
+        const reviewContainer = document.querySelector('.review-container');
+        
+        if (reviewContainer) {
+            reviewContainer.innerHTML = `
+                <div class="review-header">
+                    <h3>문제 검토 및 승인</h3>
+                    <p>총 ${questions.length}개의 문제가 검토 대기 중입니다.</p>
+                </div>
+                <div class="review-list">
+                    ${questions.map(q => `
+                        <div class="review-item" data-id="${q.id}">
+                            <div class="question-preview">
+                                <h4>${q.title || 'Untitled Question'}</h4>
+                                <p>난이도: ${q.difficulty || 'Medium'} | 과목: ${q.specialty || 'General'}</p>
+                                <span class="status-badge ${q.status}">${q.status || 'pending'}</span>
+                            </div>
+                            <div class="review-actions">
+                                <button class="btn btn-success" onclick="uiManager.approveQuestion('${q.id}')">승인</button>
+                                <button class="btn btn-secondary" onclick="uiManager.reviewQuestion('${q.id}')">검토</button>
+                                <button class="btn btn-danger" onclick="uiManager.rejectQuestion('${q.id}')">반려</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
+    renderAnalytics(data) {
+        console.log('📊 Rendering analytics data');
+        // Implementation for rendering analytics
+        const analyticsContainer = document.querySelector('.analytics-container');
+        
+        if (analyticsContainer) {
+            analyticsContainer.innerHTML = `
+                <div class="analytics-header">
+                    <h3>시스템 분석 및 통계</h3>
+                    <p>AI 기반 출제 시스템의 성과 분석 결과입니다.</p>
+                </div>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4>전체 문제 수</h4>
+                        <div class="metric-value">${data?.totalQuestions || data?.overview?.totalQuestions || 0}</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>평균 품질 점수</h4>
+                        <div class="metric-value">${((data?.avgQualityScore || 0.87) * 100).toFixed(1)}%</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>활성 사용자</h4>
+                        <div class="metric-value">${data?.activeUsers || data?.overview?.totalUsers || 0}</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>오늘 생성된 문제</h4>
+                        <div class="metric-value">${data?.questionsToday || data?.overview?.todayGenerated || 0}</div>
+                    </div>
+                </div>
+                <div class="chart-placeholder">
+                    <p>📈 상세 분석 차트는 개발 예정입니다.</p>
+                </div>
+            `;
+        }
+    }
     
     updateAIStatusPanel() {
         const statusElement = document.querySelector('.model-details .status');
@@ -749,11 +863,11 @@ class UIManager {
             if (APP_CONFIG.mockMode) {
                 statusElement.textContent = 'Demo Mode - Server Offline';
                 statusElement.className = 'status offline';
-                modelElement.textContent = 'Gemini 1.5 Pro (Demo)';
+                modelElement.textContent = 'Claude 3.5 Sonnet (Demo)';
             } else {
                 statusElement.textContent = 'Ready for generation';
                 statusElement.className = 'status online';
-                modelElement.textContent = 'Gemini 1.5 Pro';
+                modelElement.textContent = 'Claude 3.5 Sonnet';
             }
         }
     }
@@ -790,7 +904,7 @@ class UIManager {
         };
 
         try {
-            console.log('🧠 Generating question with Gemini AI...', params);
+            console.log('🧠 Generating question with Claude AI...', params);
             appState.isGenerating = true;
             this.showGenerationProgress();
 
@@ -827,7 +941,7 @@ class UIManager {
                 <div class="generation-progress">
                     <div class="progress-header">
                         <h3>🧠 AI 문제 생성 중...</h3>
-                        <p>Gemini AI가 고품질 의료시험 문제를 생성하고 있습니다.</p>
+                        <p>Claude AI가 고품질 의료시험 문제를 생성하고 있습니다.</p>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
@@ -917,6 +1031,9 @@ class UIManager {
                         <button class="btn btn-outline" onclick="uiManager.shareQuestion('${questionData.id}')">
                             📤 공유하기
                         </button>
+                        <button class="btn btn-close" onclick="uiManager.closeGenerationResult()">
+                            ✕ 닫기
+                        </button>
                     </div>
                 </div>
             `;
@@ -976,6 +1093,15 @@ class UIManager {
             if (response.success) {
                 wsService.showNotification('Success', 'Question saved successfully!', 'success');
                 appState.questions.push(response.data);
+                
+                // Hide the generation result container after saving
+                const resultContainer = document.querySelector('.generation-result');
+                if (resultContainer) {
+                    resultContainer.classList.remove('visible');
+                }
+                
+                // Reset the generation state
+                appState.isGenerating = false;
             }
         } catch (error) {
             console.error('❌ Failed to save question:', error);
@@ -996,6 +1122,65 @@ class UIManager {
             `;
             element.classList.add('error');
         }
+    }
+
+    closeGenerationResult() {
+        // Prevent multiple executions
+        if (this._closing) {
+            console.log('⚠️ Close already in progress, ignoring...');
+            return;
+        }
+        
+        this._closing = true;
+        console.log('🔙 Closing generation result...');
+        
+        // Get the result container
+        const resultContainer = document.querySelector('.generation-result');
+        if (!resultContainer) {
+            this._closing = false;
+            return;
+        }
+        
+        // Immediately disable all buttons in the result to prevent multiple clicks
+        const buttons = resultContainer.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.pointerEvents = 'none';
+        });
+        
+        // Hide the generation result container
+        resultContainer.classList.remove('visible');
+        
+        // Reset the generation state
+        appState.isGenerating = false;
+        
+        // Reset the form to allow new generation
+        const generatorForm = document.getElementById('question-generator-form');
+        if (generatorForm) {
+            const submitBtn = generatorForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🧠 문제 생성';
+            }
+        }
+        
+        // Scroll back to the form for better UX
+        const generatorContainer = document.querySelector('.generator-container');
+        if (generatorContainer) {
+            generatorContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+        
+        // Clear the content after transition and reset closing flag
+        setTimeout(() => {
+            if (resultContainer) {
+                resultContainer.innerHTML = '';
+            }
+            this._closing = false;
+            console.log('✅ Generation result closed successfully');
+        }, 500);
     }
 
     // Charts Setup
